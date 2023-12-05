@@ -24,9 +24,10 @@ public class Main{
         System.out.print("Selecione uma opção de teste de conectividade:"
                 + "\n1 - Atalhos"
                 + "\n2 - HTTP POST Request"
+                + "\n3 - HTTP GET Request"
                 + "\n3 - Socket Connection"
                 + "\n4 - SMB Connection"
-                + "\n5 - Database Connection"
+                + "\n5 - Oracle Database Connection"
                 + "\n6 - Webscraping"
                 + "\n7 - Encerrar aplicação\n\n"
                 + "Opção: ");
@@ -40,20 +41,22 @@ public class Main{
                 httpPost ();
                 break;
             case "3":
-                socket();
+                httpGET ();
                 break;
             case "4":
-                smbProtocol();
+                socket();
                 break;
             case "5":
-                database();
+                smbProtocol();
                 break;
             case "6":
-                webscraping();
+                database();
                 break;
             case "7":
-                //apenas encerra a aplicação.
+                webscraping();
                 break;
+            case "8":
+                //apenas encerra a aplicação.
         }
         
     }
@@ -74,6 +77,19 @@ public class Main{
         }
         httpPostConnection http = new httpPostConnection();
         http.hConnect(url, urlP);
+    }
+    
+        private static void httpGET () throws IOException{
+        System.out.println("\nHTTP POST GET:\n");
+        String url = "#";
+        String run = "#";
+        
+        while ((!"S".equals(run))&&(!"s".equals(run))){
+        System.out.print("Endereço destino: "); url = scanner.nextLine();
+        System.out.print("Confirmar configurações (S|N)? "); run = scanner.nextLine(); 
+        }
+        httpGetConnection http = new httpGetConnection();
+        http.hConnect(url);
     }
     
         private static void socket (){
