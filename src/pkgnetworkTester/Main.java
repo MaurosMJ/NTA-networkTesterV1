@@ -15,6 +15,16 @@ import java.util.Scanner;
 public class Main{
 
     private static Scanner scanner = new Scanner(System.in);
+    private static String host;
+    private static String port;
+    private static String protocol;
+    private static String remetente;
+    private static String destinatario;
+    private static String senha;
+    private static String url;
+    private static String urlP;
+    private static String passW;
+    private static String user;
     
     public static void main(String[] args) throws IOException {
         String input = "#";
@@ -25,11 +35,12 @@ public class Main{
                 + "\n1 - Atalhos"
                 + "\n2 - HTTP POST Request"
                 + "\n3 - HTTP GET Request"
-                + "\n3 - Socket Connection"
-                + "\n4 - SMB Connection"
-                + "\n5 - Oracle Database Connection"
-                + "\n6 - Webscraping"
-                + "\n7 - Encerrar aplicação\n\n"
+                + "\n4 - Socket Connection"
+                + "\n5 - SMB Protocol Connection"
+                + "\n6 - SMTP Protocol Connection"
+                + "\n7 - Oracle Net Procotol Connection"
+                + "\n8 - Webscraping"
+                + "\n9 - Encerrar aplicação\n\n"
                 + "Opção: ");
         
         input = scanner.nextLine();
@@ -50,17 +61,51 @@ public class Main{
                 smbProtocol();
                 break;
             case "6":
-                database();
+                smtpMail();
                 break;
             case "7":
-                webscraping();
+                database();
                 break;
             case "8":
-                //apenas encerra a aplicação.
+                webscraping();
+                break;
+            case "9":
+                break;//apenas encerra a aplicação.
         }
         
     }
         
+    }
+    
+    private static void smtpMail (){
+        System.out.println("\nHTTP SMTP Protocol:\n");
+        
+        String host = "#";
+        String porta = "#";
+        String protocol = "#";
+        String remetente = "#";
+        String destinatario = "#";
+        String senha = "#";
+        String run = "#";
+        
+        while ((!"S".equals(run))&&(!"s".equals(run))){
+        System.out.println("\nHost SMTP: "+host
+                + "Porta: "+porta
+                + "Protocolo: "+protocol
+                + "Remetente: "+remetente
+                + "Destinatario: "+destinatario
+                + "Senha: "+senha);    
+            
+        System.out.print("Host SMTP: "); host = scanner.nextLine();
+        System.out.print("Porta: "); porta = scanner.nextLine();
+        System.out.print("Protocolo: "); protocol = scanner.nextLine();
+        System.out.print("Remetente: "); remetente = scanner.nextLine();
+        System.out.print("Destinatario: "); destinatario = scanner.nextLine();
+        System.out.print("Senha: "); senha = scanner.nextLine();
+        System.out.print("Confirmar configurações (S|N)? "); run = scanner.nextLine(); 
+        }
+        smtpConnection smtp = new smtpConnection ();
+        smtp.smtpH(host, porta, protocol, remetente, destinatario, senha);
     }
     
     private static void httpPost () throws IOException{
@@ -71,6 +116,9 @@ public class Main{
         String run = "#";
         
         while ((!"S".equals(run))&&(!"s".equals(run))){
+        System.out.println("Endereço Destino: "+url
+                + "Parametros Opcionais: "+urlP);
+            
         System.out.print("Endereço destino: "); url = scanner.nextLine();
         System.out.print("Parametros opcionais: "); urlP = scanner.nextLine();
         System.out.print("Confirmar configurações (S|N)? "); run = scanner.nextLine(); 
@@ -85,6 +133,8 @@ public class Main{
         String run = "#";
         
         while ((!"S".equals(run))&&(!"s".equals(run))){
+        System.out.println("Endereço destino: "+url);
+            
         System.out.print("Endereço destino: "); url = scanner.nextLine();
         System.out.print("Confirmar configurações (S|N)? "); run = scanner.nextLine(); 
         }
@@ -100,6 +150,9 @@ public class Main{
         String run = "#";
         
         while ((!"S".equals(run))&&(!"s".equals(run))){
+        System.out.println("Máquina destino: "+url
+                + "Porta: "+port);
+            
         System.out.print("Informar a máquina destino: "); url = scanner.nextLine();
         System.out.print("Informar a porta da máquina: "); port = scanner.nextLine();
         System.out.print("Confirmar configurações (S|N)? "); run = scanner.nextLine(); 
@@ -115,14 +168,20 @@ public class Main{
         String host = "#";
         String user = "0";
         String run = "#";
+        String passW = "#";
         
         while ((!"S".equals(run))&&(!"s".equals(run))){
+        System.out.println("Nome da máquina: "
+                + "Usuário: "
+                + "Senha: ");
+            
         System.out.print("Informar endereço de IP ou nome da máquina: "); host = scanner.nextLine();
         System.out.print("Informar o Usuário: "); user = scanner.nextLine();
+        System.out.print("Informar o Senha: ");  passW = scanner.nextLine();
         System.out.print("Confirmar configurações (S|N)? "); run = scanner.nextLine(); 
         }
         
-        String passW = scanner.nextLine();
+        
         smbConnection smb = new smbConnection ();
         smb.smbInit(user, passW, host);
         }
@@ -154,11 +213,50 @@ public class Main{
         while ((!"S".equals(run))&&(!"s".equals(run))){
         url = scanner.nextLine();
         }
-        
         webscraping web = new webscraping();
         web.webscrapingM(url);
+        }
+        
+        private static void trataCampo (String Command, String input){
+        
+        // Encontrar a posição da palavra "host"
+        int index = input.indexOf(Command);
+        
+        // Verificar se a palavra "host" foi encontrada e pegar o texto após ela
+        if (index != -1 && index + Command.length() < input.length()) {
+            String textoDepoisHost = input.substring(index + Command.length() + 1);
+            System.out.println("Texto após 'host': " + textoDepoisHost);
+        }  
             
         }
         
-    
+        private static void atualizaValor (String key, String valor){
+            
+        switch (key){
+            case "host":
+            host = valor;    
+            case "port":
+            port = valor;    
+            case "protocol":
+            protocol = valor;    
+            case "remetente":
+            remetente = valor;    
+            case "destinatario":
+            destinatario = valor;    
+            case "senha":
+            senha = valor;    
+            case "url":
+            url = valor;    
+            case "urlP":
+            urlP = valor;    
+            case "passW":
+            passW = valor;    
+            case "user":
+            user = valor;    
+            
+            default:
+                System.out.println("Comando não reconhecido.");
+        }
+        
+        }
 }
