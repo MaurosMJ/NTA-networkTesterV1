@@ -15,23 +15,24 @@ import java.util.Scanner;
 public class Main{
 
     private static Scanner scanner = new Scanner(System.in);
-    private static String host;
-    private static String port;
-    private static String protocol;
-    private static String remetente;
-    private static String destinatario;
-    private static String senha;
-    private static String url;
-    private static String urlP;
-    private static String passW;
-    private static String user;
+    private static String host = "Não informado.";
+    private static String porta = "Não informado.";
+    private static String protocol = "Não informado.";
+    private static String remetente = "Não informado.";
+    private static String destinatario = "Não informado.";
+    private static String senha = "Não informado.";
+    private static String url = "Não informado.";
+    private static String urlP = "Não informado.";
+    private static String passW = "Não informado.";
+    private static String user = "Não informado.";
+    private static String run = "Não informado.";
     
     public static void main(String[] args) throws IOException {
-        String input = "#";
+        String input = "Não informado.";
         
         while (!input.equals("7")){
         
-        System.out.print("Selecione uma opção de teste de conectividade:"
+        System.out.println("\nSelecione uma opção de teste de conectividade:"
                 + "\n1 - Atalhos"
                 + "\n2 - HTTP POST Request"
                 + "\n3 - HTTP GET Request"
@@ -79,15 +80,7 @@ public class Main{
     
     private static void smtpMail (){
         System.out.println("\nHTTP SMTP Protocol:\n");
-        
-        String host = "#";
-        String porta = "#";
-        String protocol = "#";
-        String remetente = "#";
-        String destinatario = "#";
-        String senha = "#";
-        String run = "#";
-        
+
         while ((!"S".equals(run))&&(!"s".equals(run))){
         System.out.println("\nHost SMTP: "+host
                 + "Porta: "+porta
@@ -111,9 +104,9 @@ public class Main{
     private static void httpPost () throws IOException{
         System.out.println("\nHTTP POST REQUEST:\n");
         
-        String url = "#";
-        String urlP = "#";
-        String run = "#";
+        String url = "Não informado.";
+        String urlP = "Não informado.";
+        String run = "Não informado.";
         
         while ((!"S".equals(run))&&(!"s".equals(run))){
         System.out.println("Endereço Destino: "+url
@@ -129,8 +122,8 @@ public class Main{
     
         private static void httpGET () throws IOException{
         System.out.println("\nHTTP POST GET:\n");
-        String url = "#";
-        String run = "#";
+        String url = "Não informado.";
+        String run = "Não informado.";
         
         while ((!"S".equals(run))&&(!"s".equals(run))){
         System.out.println("Endereço destino: "+url);
@@ -145,13 +138,13 @@ public class Main{
         private static void socket (){
         System.out.println("\nSOCKET CONNECTION:\n");
             
-        String url = "#";
-        String port = "0";
-        String run = "#";
+        String url = "Não informado.";
+        String port = "Não informado.";
+        String run = "Não informado.";
         
         while ((!"S".equals(run))&&(!"s".equals(run))){
-        System.out.println("Máquina destino: "+url
-                + "Porta: "+port);
+        System.out.println("Máquina destino: "+url);
+        System.out.println("Porta: "+port);
             
         System.out.print("Informar a máquina destino: "); url = scanner.nextLine();
         System.out.print("Informar a porta da máquina: "); port = scanner.nextLine();
@@ -165,10 +158,10 @@ public class Main{
         
         private static void smbProtocol (){
         System.out.println("\nSMB CONNECTION:\n");
-        String host = "#";
-        String user = "0";
-        String run = "#";
-        String passW = "#";
+        String host = "Não informado.";
+        String user = "Não informado.";
+        String run = "Não informado.";
+        String passW = "Não informado.";
         
         while ((!"S".equals(run))&&(!"s".equals(run))){
         System.out.println("Nome da máquina: "
@@ -188,10 +181,10 @@ public class Main{
         
         private static void database (){
         System.out.println("\nORACLE DATABASE CONNECTION:\n");
-        String run = "#";
-        String url = "#";
-        String passW = "#";
-        String usuario = "#";
+        String run = "Não informado.";
+        String url = "Não informado.";
+        String passW = "Não informado.";
+        String usuario = "Não informado.";
                 
         while ((!"S".equals(run))&&(!"s".equals(run))){
         System.out.print("Informar a URL do Banco de dados: "); url = scanner.nextLine();
@@ -207,8 +200,8 @@ public class Main{
         
         private static void webscraping(){
         System.out.println("\nWEBSCRAPING:\n");
-        String run = "#";
-        String url = "#";
+        String run = "Não informado.";
+        String url = "Não informado.";
         
         while ((!"S".equals(run))&&(!"s".equals(run))){
         url = scanner.nextLine();
@@ -236,7 +229,7 @@ public class Main{
             case "host":
             host = valor;    
             case "port":
-            port = valor;    
+            porta = valor;    
             case "protocol":
             protocol = valor;    
             case "remetente":
@@ -258,5 +251,36 @@ public class Main{
                 System.out.println("Comando não reconhecido.");
         }
         
+        }
+        
+        private static void command (String command, int num) {
+            
+            if (command.toLowerCase().contains("set")){
+                
+            }
+            
+            if (command.toLowerCase().contains("show")){
+                
+            }
+            
+        }
+        
+        private static void showParam (int option){
+           
+           if (option == 6){
+                System.out.println("\nHost SMTP: "+host
+                + "Porta: "+porta
+                + "Protocolo: "+protocol
+                + "Remetente: "+remetente
+                + "Destinatario: "+destinatario
+                + "Senha: "+senha);    
+
+           }
+           if (option == 1){
+               
+           }
+           if (option == 1){
+               
+           }
         }
 }
