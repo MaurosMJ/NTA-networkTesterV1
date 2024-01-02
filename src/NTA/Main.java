@@ -20,8 +20,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -33,7 +31,7 @@ public class Main{
     private static String host = "Não informado.";
     private static String port = "Não informado.";
     private static String prot = "Não informado.";
-    private static String remetente = "Não informado.";
+    private static String rem = "Não informado.";
     private static String des = "Não informado.";
     private static String pwd = "Não informado.";
     private static String url = "Não informado.";
@@ -69,7 +67,7 @@ public class Main{
                 + "\n\n"
                 + "Escolha um módulo de 1 até 10: ");
         
-        input = input (true);
+        input = input (true,false);
         
         switch (input.toLowerCase()){
             case "1":
@@ -113,19 +111,23 @@ public class Main{
             default:
                 System.out.println("Comando inválido. Deve ser selecionado um módulo de 1 á 10.");
                 System.out.println("Pressione enter para continuar.");
-                input(false);
+                input(false,false);
         }
         
         }
     }
     
-    private static String input (boolean trim){
+    private static String input (boolean trim, boolean num){
         System.out.print(">");String entrada = scanner.nextLine();
         
         if(trim){
         entrada = entrada.replaceAll("\\s+", "");
         }
-        
+        if (num){
+            if(!entrada.matches("[0-9]+")){
+                entrada = "";
+            }
+        }
         return entrada;
     } 
     
@@ -136,7 +138,7 @@ public class Main{
         
         while (!"exit".equals(input.toLowerCase())){
             input = "";
-            input = input(true);
+            input = input(true,false);
             command(input,6);
             
         //System.out.print("Confirmar configurações (S|N)? "); run = input ();
@@ -149,7 +151,7 @@ public class Main{
         
         while (!"exit".equals(input.toLowerCase())){
             input = "";
-            input = input(true);
+            input = input(true,false);
             command(input,2);
         //System.out.print("Confirmar configurações (S|N)? "); run = input ();
         }
@@ -163,7 +165,7 @@ public class Main{
         
         while (!"exit".equals(input.toLowerCase())){
             input = "";
-            input = input(true);
+            input = input(true,false);
             command(input,3);        //System.out.print("Confirmar configurações (S|N)? "); run = input ();
         }
 
@@ -176,7 +178,7 @@ public class Main{
         
         while (!"exit".equals(input.toLowerCase())){
             input = "";
-            input = input(true);
+            input = input(true,false);
             command(input,4);
          //System.out.print("Confirmar configurações (S|N)? "); run = input ();
         }
@@ -191,7 +193,7 @@ public class Main{
         
         while (!"exit".equals(input.toLowerCase())){
             input = "";
-            input = input(true);
+            input = input(true,false);
             command(input,5);
         //System.out.print("Confirmar configurações (S|N)? "); run = input ();
         }
@@ -204,7 +206,7 @@ public class Main{
         String input = "";
         while (!"exit".equals(input.toLowerCase())){
             input = "";
-            input = input(true);
+            input = input(true,false);
             command(input,7);
             
         //System.out.print("Confirmar configurações (S|N)? "); run = input ();
@@ -229,39 +231,43 @@ public class Main{
             System.out.println("Defina um valor para "+var+": ");
         switch (var){
             case "host":
-            host = input(true);
+            host = input(true,false);
             break;
                 
             case "port":
-            port = input(true);
+            port = input(true,true);
+            if ("".equals(port)){
+                System.out.println("Valor inválido para este parametro");            
+                System.out.println("Pressione enter para continuar.");
+                input(false,false);}
             break;
                 
             case "prot":
-            prot = input(true);
+            prot = input(true,false);
             break;
                 
             case "rem":
-            remetente = input(true);
+            rem = input(true,false);
             break;
                 
             case "des":
-            des = input(true);
+            des = input(true,false);
             break;
                 
             case "pwd":
-            pwd = input(true);
+            pwd = input(true,false);
             break;
                 
             case "url":
-            url = input(true);
+            url = input(true,false);
             break;
                 
             case "urlP":
-            urlP = input(true);
+            urlP = input(true,false);
             break;
                 
             case "usr":
-            usr = input(true);
+            usr = input(true,false);
             break;
                 
             case "exit":
@@ -273,7 +279,7 @@ public class Main{
             default:
             System.out.println("Comando não reconhecido.");
             System.out.println("Pressione enter para continuar.");
-            input(false);
+            input(false,false);
         }
         
         }
@@ -290,7 +296,7 @@ public class Main{
                         
             }
             
-            else if(command.toLowerCase().contains("list")){
+            else if(command.toLowerCase().contains("hp")||command.toLowerCase().contains("help")){
                 listVar(modulo);
             }
             else if(command.toLowerCase().equals("exit")){
@@ -301,9 +307,9 @@ public class Main{
             }
             
             else {
-             System.out.println("Comando não reconhecido.");
+            System.out.println("Comando não reconhecido.");
             System.out.println("Pressione enter para continuar.");
-            input(false);               
+            input(false,false);               
             }
         }
         
@@ -316,28 +322,65 @@ public class Main{
                 System.out.println("Não há necessidade de executar este módulo.");
                     break;
                 case 2:
+                if(!"Não informado.".equals(url)&&!"Não informado.".equals(urlP)){
                 httpPostConnection httpP = new httpPostConnection();
                 httpP.hConnect(url, urlP);
+                } else{
+                System.out.println("Necessário informar todos os parametros obrigatórios.");
+            System.out.println("Pressione enter para continuar.");
+            input(false,false); 
+            
+                }
                     break;
                 case 3:
+                if(!"Não informado.".equals(url)){
                 httpGetConnection httpG = new httpGetConnection();
                 httpG.hConnect(url);
+                } else{
+                System.out.println("Necessário informar todos os parametros obrigatórios.");
+            System.out.println("Pressione enter para continuar.");
+            input(false,false); 
+                }
                     break;
                 case 4:
+                if(!"Não informado.".equals(host)&&!"Não informado.".equals(port)){
                 socketConnection socket = new socketConnection();
                 socket.socketM(host, Integer.parseInt(port));
+                } else{
+                System.out.println("Necessário informar todos os parametros obrigatórios.");
+            System.out.println("Pressione enter para continuar.");
+            input(false,false); 
+                }
                     break;
                 case 5:
+                if(!"Não informado.".equals(usr)&&!"Não informado.".equals(pwd)&&!"Não informado.".equals(host)){
                 smbConnection smb = new smbConnection ();
-                smb.smbInit(usr, pwd, host);                
+                smb.smbInit(usr, pwd, host);
+                } else {
+                System.out.println("Necessário informar todos os parametros obrigatórios.");
+            System.out.println("Pressione enter para continuar.");
+            input(false,false); 
+                }
                     break;
                 case 6:
+                if(!"Não informado.".equals(host)&&!"Não informado.".equals(port)&&!"Não informado.".equals(prot)&&!"Não informado.".equals(prot)&&!"Não informado.".equals(rem)&&!"Não informado.".equals(des)&&!"Não informado.".equals(pwd)){    
                 smtpConnection smtp = new smtpConnection ();
-                smtp.smtpH(host, port, prot, remetente, des, pwd);
+                smtp.smtpH(host, port, prot, rem, des, pwd);
+                } else {
+                                    System.out.println("Necessário informar todos os parametros obrigatórios.");
+            System.out.println("Pressione enter para continuar.");
+            input(false,false); 
+                }
                     break;
                 case 7:
+                if(!"Não informado.".equals(url)&&!"Não informado.".equals(usr)&&!"Não informado.".equals(pwd)){
                 oracledbConnection db = new oracledbConnection ();
                 db.databaseM(url, usr, pwd);
+                } else{
+                                    System.out.println("Necessário informar todos os parametros obrigatórios.");
+            System.out.println("Pressione enter para continuar.");
+            input(false,false); 
+                }
                     break;
                 case 8:
                     System.out.println("URL (url): "+url);
@@ -388,7 +431,7 @@ public class Main{
                     System.out.println("Maquina (host): "+host);
                     System.out.println("Porta (port): "+port); 
                     System.out.println("Protocolo (prot): "+prot);
-                    System.out.println("Remetente (rem): "+remetente); 
+                    System.out.println("Remetente (rem): "+rem); 
                     System.out.println("Senha (pwd): "+pwd);
                     System.out.println("Destinatário (des): "+des); 
                     break;
@@ -466,7 +509,7 @@ public class Main{
             
             while (!"exit".equals(input.toLowerCase())){
             input = ""; 
-            input = input(true);
+            input = input(true,false);
             command(input,1);
             }
         
