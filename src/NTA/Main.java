@@ -6,6 +6,10 @@
 package NTA;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.management.ClassLoadingMXBean;
@@ -16,9 +20,15 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.RuntimeMXBean;
 import java.lang.management.ThreadMXBean;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -28,104 +38,205 @@ import java.util.Scanner;
 public class Main {
 
     private static Scanner scanner = new Scanner(System.in);
-    private static String host = "Não informado.";
-    private static String port = "Não informado.";
-    private static String aut = "s (default)";
-    private static String stls = "s (default)";
-    private static String prot = "Não informado.";
-    private static String rem = "Não informado.";
-    private static String des = "Não informado.";
-    private static String pwd = "Não informado.";
-    private static String url = "Não informado.";
-    private static String urlP = "Não informado.";
-    private static String usr = "Não informado.";
-    private static String tmsg = "E-mail enviado pelo NTA (default).";
-    private static String pmsg = "E-mail enviado pelo NTA (default).";
+    private static String host = "Not specified.";
+    private static String port = "Not specified.";
+    private static String aut = "y (default)";
+    private static String stls = "y (default)";
+    private static String prot = "Not specified.";
+    private static String rem = "Not specified.";
+    private static String des = "Not specified.";
+    private static String pwd = "Not specified.";
+    private static String url = "Not specified.";
+    private static String urlP = "Not specified.";
+    private static String usr = "Not specified.";
+    private static String tmsg = "Email sent with a default title by the NTA.";
+    private static String pmsg = "Email sent with a default subject by the NTA.";
+    private static String qtdm = "1 (default)";
+    private static String machineName = "";
+    private static final String sysName = System.getProperty("os.name").toLowerCase();
+    private static final String usrName = System.getProperty("user.name");
 
-    public static void main(String[] args) throws IOException {
-
+    public static void main(String[] args) throws IOException, FileNotFoundException {
+        
+        getSysUserHostname();
         telaModulos();
 
     }
 
     private static void telaModulos() throws IOException {
 
-        String input = "Não informado.";
+        String input = "Not specified.";
 
-        while (!input.equals("13")) {
+        while (!input.toLowerCase().equals("x")||!input.toLowerCase().equals("exit")) {
 
-            System.out.println("\nMódulos:"
-                    + "\n1 - JVM Info"
-                    + "\n2 - HTTP POST Request"
-                    + "\n3 - HTTP GET Request"
-                    + "\n4 - Socket Connection"
-                    + "\n5 - SMB Protocol Connection"
-                    + "\n6 - SMTP Protocol Connection"
-                    + "\n7 - Oracle Net Procotol Connection"
-                    + "\n8 - Tabular Data Stream Connection"
-                    + "\n9 - MySQL Protocol Connection (TCP\\IP)"
-                    + "\n10 - SQL Command Window"
-                    + "\n11 - Histórico"
-                    + "\n12 - Atalhos"
-                    + "\n13 - Encerrar Aplicação"
-                    + "\n\n"
-                    + "Escolha um módulo de 1 até 10: ");
+            //System.out.println("\nEscolha um módulo: ");
 
-            input = input(true, false);
-
-            switch (input.toLowerCase()) {
-                case "1":
-                    jvmInfo();
+            command(input(true, false,""),0);
+            
+            
+        }
+        System.exit(0);
+    }
+    
+    private static void modWindow(String input) throws IOException{
+        
+        switch (input.toLowerCase()) {
+                case "*":
+                    jvmInfo_all();
                     break;
-                case "2":
+                    
+                case "opts":
+                    jvmInfo_jvm_opt();
+                    break;
+                
+                case "java_home":
+                    jvmInfo_java_home();
+                    break;
+                    
+                case "time":
+                    jvmInfo_time();
+                    break;
+                
+                case "memorymxbean":
+                    jvmInfo_memoryMXBean();
+                    break;
+                
+                case "operatingsystemmxbean":
+                    jvmInfo_operatingSystemMXBean();
+                    break;
+                
+                case "availableprocessors":
+                    jvmInfo_availableProcessors();
+                    break;
+                
+                case "threadmxbean":
+                    jvmInfo_threadMXBean();
+                    break;
+                
+                case "compilationmxbean":
+                    jvmInfo_compilationMXBean();
+                    break;
+                
+                case "garbagecollectormxbean":
+                    jvmInfo_garbageCollectorMXBean();
+                    break;
+                
+                case "classloadingmxbean":
+                    jvmInfo_classLoadingMXBean();
+                    break;
+                                    
+                case "hpost":
                     httpPost();
                     break;
-                case "3":
+                case "hget":
                     httpGET();
                     break;
-                case "4":
+                case "socket":
                     socket();
                     break;
-                case "5":
+                case "smb":
                     smbProtocol();
                     break;
-                case "6":
+                case "mail":
                     smtpMail();
                     break;
-                case "7":
+                case "oracle":
                     databaseORA();
                     break;
-                case "8":
+                case "mserver":
                     databaseMS();
                     break;
-                case "9":
+                case "mysql":
                     databaseMY();
                     break;
-                case "10":
-                    break;
+                case "input":
+                    readTextFile();;
                 case "11":
                     break;
                 case "12":
                     break;
-                case "13":
-                    System.exit(0);
-                    ;//apenas encerra a aplicação.
-                case "exit":
-                    System.exit(0);
-                case "x":
-                    System.exit(0);
 
                 default:
-                    System.out.println("Comando inválido. Deve ser selecionado um módulo de 1 á 10.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    System.out.println("Press [Enter] to continue:");
+                    input(false, false, "[Enter] >");
             }
+        
+    }
+    
+    private static void displayMod (){
+        
+        displayCom(1);
+System.out.println("\nCore Framework\\Modules:" +
+"\n=======================\n" +
+"\n   Module                                                                Description" +
+"\n   ------                                                                -----------\n\n" +        
+   "   \\Jvm_info\\java.lang.management\\ClassLoadingMXBean                     Displays information about class loading at runtime in a Java Virtual Machine (JVM).\n"+
+   "   \\Jvm_info\\java.lang.management\\CompilationMXBean                      Displays information about the compilation process in a Java Virtual Machine (JVM).\n"+
+   "   \\Jvm_info\\java.lang.management\\GarbageCollectorMXBean                 Displays information about insights and control over the garbage collection process in a Java Virtual Machine (JVM).\n"+
+   "   \\Jvm_info\\java.lang.management\\ManagementFactory                      Displays information about convenient methods for accessing various management beans in the Java Virtual Machine (JVM).\n"+
+   "   \\Jvm_info\\java.lang.management\\MemoryMXBean                           Displays information about insights into the memory usage, memory pools, and garbage collection statistics.\n"+
+   "   \\Jvm_info\\java.lang.management\\OperatingSystemMXBean                  Displays information about underlying operating system's monitoring and management information.\n"+
+    "   \\Jvm_info\\java.lang.management\\ThreadMXBean                           Displays information about thread activity, including monitoring and managing threads.\n"+
+   "   \\Jvm_info\\java.time.LocalDateTime\\time                                Displays information about  the local machine's time and the time obtained from the JVM for comparison purposes.\n"+
+   "   \\Jvm_info\\java.lang.management\\runtimeMXBean\\opts                     Displays information about all JVM parameters/arguments defined globally in the operating system.\n"+
+   "   \\Jvm_info\\System\\java_home                                            Displays information about Java installation path.\n"+
+   "   \\Jvm_info\\System\\*                                                    Displays all available information related to the JVM.\n"+
+   "   \\database\\mysql.cj.jdbc.Driver\\mysql                                  Establishes a connection with a MYSQL database using the proprietary driver.\n"+
+   "   \\database\\jdbc.driver.OracleDriver\\oracle                             Establishes a connection with a ORACLE database using the proprietary driver.\n"+
+   "   \\database\\microsoft.sqlserver.jdbc.SQLServerDriver\\mserver            Establishes a connection with a MICROSOFT SQL SERVER database using the proprietary driver.\n"+
+   "   \\smb_connection\\jcifs\\smb                                             Establishes a SMB (Server Message Block) connection with a file server (Storage NAS) and lists all files in the primary directory via JVM.\n"+
+   "   \\smtp_protocol_connection\\javax.mail\\mail                             Establishes a connection with an SMTP (Simple Mail Transfer Protocol) server and sends an email using the provided context-specific variables via JVM.\n"+
+   "   \\socket_Connetion\\java.net\\socket                                     Establishes a bidirectional TCP communication channel between a client and a server via JVM.\n"+
+   "   \\httpPost_Request\\java.net\\hpost                                      Performs an HTTP POST request between a client and a web server via JVM.\n"+
+   "   \\httpGet_Request\\java.net\\hget                                        Performs an HTTP GET request between a client and a web server via JVM.\n"+
+   "   \\txt\\input                                                            Through the file '\\NTA\\class\\txt\\input.nta', all global variables will be loaded.\n"
+                    );
+        
 
+    }
+    
+        private static void displayHpPar(){
+            
+            System.out.println("\nModule Parameters:" +
+"\n==================\n" +
+"\n   Parameter                         Value" +
+"\n   ---------                         -----\n"
+                    );
+            
         }
+    
+        private static void displayCom (int win){
+            
+            if (win==1){
+System.out.println("\nCore Commands:" +
+"\n==============\n" +
+"\n   Command                  Description" +
+"\n   -------                  -----------\n\n" +   
+   "   'help' or 'hp'            Displays information about modules and gets the value of context-specific variables.\n"+
+   "   'load'                    Load a context-specific framework module.\n"+
+   "   'exit' or 'x'             Move back from the current context.\n"+
+   "   'exit-now' or 'xn'        Exit the console."
+                    );
+            }
+            
+            if (win==2){
+System.out.println("\nCore Commands:" +
+"\n==============\n" +
+"\n   Command                  Description" +
+"\n   -------                  -----------\n\n" +   
+   "   'help' or 'hp'            Displays information about modules and gets the value of context-specific variables.\n"+
+   "   'set'                     Sets a context-specific variable to a value.\n"+
+   "   'run'                     Run a framework module.\n"+     
+   "   'unset'                   Unsets one context-specific variable.\n"+
+   "   'exit' or 'x'             Move back from the current context.\n"+
+   "   'exit-now' or 'xn'        Exit the console.\n"
+                    );
+                            
+            }
     }
 
-    private static String input(boolean trim, boolean num) {
-        System.out.print(">");
+    private static String input(boolean trim, boolean num, String compl) {
+        System.out.print("["+usrName+"@"+machineName+"~"+sysName+"]> "+compl);
         String entrada = scanner.nextLine();
 
         if (trim) {
@@ -140,13 +251,15 @@ public class Main {
     }
 
     private static void smtpMail() throws IOException {
-        System.out.println("\nHTTP SMTP Protocol:\n");
+        System.out.println("\n######################");
+        System.out.println("### SMTP PROTOCOL  ###");
+        System.out.println("######################\n");
 
         String input = "";
 
         while (!"exit".equals(input.toLowerCase())) {
             input = "";
-            input = input(true, false);
+            input = input(true, false, "[SMTP Protocol] > ");
             command(input, 6);
 
             //System.out.print("Confirmar configurações (S|N)? "); run = input ();
@@ -159,7 +272,7 @@ public class Main {
 
         while (!"exit".equals(input.toLowerCase())) {
             input = "";
-            input = input(true, false);
+            input = input(true, false, "[HTTP Post Request] > ");
             command(input, 2);
             //System.out.print("Confirmar configurações (S|N)? "); run = input ();
         }
@@ -173,7 +286,7 @@ public class Main {
 
         while (!"exit".equals(input.toLowerCase())) {
             input = "";
-            input = input(true, false);
+            input = input(true, false, "[HTTP Get Request] > ");
             command(input, 3);        //System.out.print("Confirmar configurações (S|N)? "); run = input ();
         }
 
@@ -186,7 +299,7 @@ public class Main {
 
         while (!"exit".equals(input.toLowerCase())) {
             input = "";
-            input = input(true, false);
+            input = input(true, false, "[Socket] > ");
             command(input, 4);
             //System.out.print("Confirmar configurações (S|N)? "); run = input ();
         }
@@ -200,7 +313,7 @@ public class Main {
 
         while (!"exit".equals(input.toLowerCase())) {
             input = "";
-            input = input(true, false);
+            input = input(true, false, "[Smb Protocol] > ");
             command(input, 5);
             //System.out.print("Confirmar configurações (S|N)? "); run = input ();
         }
@@ -213,7 +326,7 @@ public class Main {
         String input = "";
         while (!"exit".equals(input.toLowerCase())) {
             input = "";
-            input = input(true, false);
+            input = input(true, false, "[Oracle Net Protocol] > ");
             command(input, 7);
 
         }
@@ -225,7 +338,7 @@ public class Main {
         String input = "";
         while (!"exit".equals(input.toLowerCase())) {
             input = "";
-            input = input(true, false);
+            input = input(true, false, "[Tabular Data Stream] > ");
             command(input, 8);
 
         }
@@ -237,101 +350,171 @@ public class Main {
         String input = "";
         while (!"exit".equals(input.toLowerCase())) {
             input = "";
-            input = input(true, false);
+            input = input(true, false, "[MySQL Protocol (TCP\\IP): ] > ");
             command(input, 9);
 
         }
 
     }
 
-    private static String trataCampo(String input) {
-        int indiceSet = input.toLowerCase().indexOf("set");
+    private static String trataCampo(String input, String token) {
+        int indiceSet = input.toLowerCase().indexOf(token);
         if (indiceSet != -1) { // Se encontrou a palavra "set"
-            return input.substring(indiceSet + 3); // Obtém o texto após "set" (considerando que "set" tem 3 caracteres)
+            return input.substring(indiceSet + token.length()); // Obtém o texto após "set" (considerando que "set" tem 3 caracteres)
         } else {
-            return "Palavra 'set' não encontrada ou sem texto após 'set'.";
+            return "Token '"+token+"' not found or empty after +"+token+".";
         }
 
     }
 
-    private static void atualizaValor(String var) {
+    private static void atualizaValor(String var, boolean set) {
 
-        System.out.println("Defina um valor para " + var + ": ");
+        //if(set){System.out.println("Defina um valor para " + var + ": ");}
         switch (var) {
             case "host":
-                host = input(true, false);
+                if(set){
+                host = input(true, false, "[Set host] > ");
                 break;
-
+                }else{
+                host = "Not specified.";    
+                }
+            
             case "port":
-                port = input(true, true);
+                
+                if(set){
+                port = input(true, true, "[Set port] > ");
                 if ("".equals(port)) {
-                    System.out.println("Valor inválido para este parametro");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
+                }
+                } else {
+                host = "Not specified.";
+                }
+                break;
+                
+            case "qtdm":
+                
+                if(set){
+                qtdm = input(true, true, "[Set qtdm] > ");
+                if ("".equals(qtdm)) {
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
+                }
+                } else {
+                host = "Not specified.";
                 }
                 break;
 
             case "prot":
-                prot = validateProt(input(true, false));
-
+                
+                if(set){
+                prot = validateProt(input(true, false, "[set prot] > "));
                 if (!"TLSv1.0".toLowerCase().equals(prot.toLowerCase()) && !"TLSv1.2".toLowerCase().equals(prot.toLowerCase()) && !"TLSv1.1".toLowerCase().equals(prot.toLowerCase()) && !"TLSv1.3".toLowerCase().equals(prot.toLowerCase()) && !"SSLv3.0".toLowerCase().equals(prot.toLowerCase()) && !"SSLv2.0".toLowerCase().equals(prot.toLowerCase())) {
-                    prot = "Não informado.";
-                    System.out.println("Protocolo inválido.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    prot = "Not specified.";
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
                 }
                 break;
-
+                } else{
+                prot = "Not specified.";    
+                }
             case "rem":
-                rem = input(true, false);
+                
+                if(set){
+                rem = input(true, false, "[Set rem] > ");
                 break;
+                } else{
+                rem = "Not specified.";
+                }
 
             case "des":
-                des = input(true, false);
+                
+                if (set){
+                des = input(true, false, "[Set des] > ");
                 break;
-
+                } else {
+                des = "Not specified.";    
+                }
+            
             case "pwd":
-                pwd = input(false, false);
+                
+                if (set){
+                pwd = input(false, false, "[Set pwd] > ");
                 break;
-
+                } else{
+                pwd = "Not specified.";
+                }
+            
             case "url":
-                url = input(true, false);
+                
+                if (set){
+                url = input(true, false, "[Set url] > ");
                 break;
-
+                } else{
+                url = "Not specified.";
+                }
+            
             case "urlP":
-                urlP = input(true, false);
+                
+                if (set){
+                urlP = input(true, false, "[Set urlP] > ");
                 break;
-
+                } else{
+                urlP = "Not specified.";
+                }
+            
             case "usr":
-                usr = input(true, false);
+                
+                if (set){
+                usr = input(true, false, "[Set usr] > ");
                 break;
-
+                } else {
+                usr = "Not specified.";
+                }
+            
             case "stls":
-                stls = input(true, false);
+                
+                if (set){
+                stls = input(true, false, "[Set stls] > ");
                 if (!"s".equals(stls.toLowerCase()) && !"n".equals(stls.toLowerCase())) {
-                    stls = "Não informado.";
-                    System.out.println("Opção inválida.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    stls = "Not specified.";
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
+                }} else {
+                    stls = "Not specified.";
                 }
                 break;
 
             case "aut":
-                aut = input(true, false);
+                
+                if (set){
+                aut = input(true, false, "[Set aut] > ");
                 if (!"s".equals(aut.toLowerCase()) && !"n".equals(aut.toLowerCase())) {
-                    aut = "Não informado.";
-                    System.out.println("Opção inválida.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    aut = "Not specified.";
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
+                }
+                } else {
+                  aut = "Not specified.";
                 }
                 break;
 
             case "tmsg":
-                tmsg = input(true, false);
+                
+                if (set){
+                tmsg = input(true, false, "[Set tmsg] > ");
+                } else {
+                tmsg = "Not specified.";
+                }
                 break;
 
             case "pmsg":
-                pmsg = input(true, false);
+                
+                if (set){
+                pmsg = input(true, false, "[Set pmsg] > ");
+                } else {
+                pmsg = "Not specified.";
+                }
                 break;
 
             case "exit":
@@ -341,31 +524,39 @@ public class Main {
                 System.exit(0);
 
             default:
-                System.out.println("Comando não reconhecido.");
-                System.out.println("Pressione enter para continuar.");
-                input(false, false);
+                System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                input(false, false, "[Enter] > ");
         }
 
     }
 
     private static void command(String command, int modulo) throws IOException {
-
-        if (command.toLowerCase().contains("set")) {
-            String var = trataCampo(command); // REMOVE A PALAVRA "SET"
-            atualizaValor(var);
+        
+        
+        if (command.toLowerCase().contains("load")&& modulo==0){
+            String var = trataCampo(command, "load");
+            modWindow(var);
+        } else if (command.toLowerCase().contains("set")&&command.toLowerCase().startsWith("se")) {
+            String var = trataCampo(command, "set"); // REMOVE A PALAVRA "SET"
+            atualizaValor(var,true);
         } else if (command.toLowerCase().contains("run")) {
             runIt(modulo);
-
+        } else if (command.toLowerCase().contains("unset")&&command.toLowerCase().startsWith("un")) {
+                       String var = trataCampo(command, "unset"); // REMOVE A PALAVRA "unset"
+            atualizaValor(var,false); 
+        } else if ((command.toLowerCase().equals("hp")||command.toLowerCase().equals("help"))&&modulo==0) {
+            displayMod();
         } else if (command.toLowerCase().contains("hp") || command.toLowerCase().contains("help")) {
             listVar(modulo);
-        } else if (command.toLowerCase().equals("exit")) {
-            telaModulos();
-        } else if (command.toLowerCase().equals("x")) {
+        } else if ((command.toLowerCase().contains("exit-now")&&(command.toLowerCase().length()==8)) || (command.toLowerCase().contains("xn")&&(command.toLowerCase().length()==2))) {
+            System.exit(0);
+        } else if ((command.toLowerCase().equals("exit")||command.toLowerCase().equals("x"))&&modulo==0) {
+            System.exit(0);
+        } else if (command.toLowerCase().equals("exit")||command.toLowerCase().equals("x")) {
             telaModulos();
         } else {
-            System.out.println("Comando não reconhecido.");
-            System.out.println("Pressione enter para continuar.");
-            input(false, false);
+            System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+            input(false, false, "[Enter] > ");
         }
     }
 
@@ -373,101 +564,92 @@ public class Main {
 
         switch (modulo) {
 
-            case 1:
-                System.out.println("Não há necessidade de executar este módulo.");
-                break;
             case 2:
-                if (!"Não informado.".equals(url) && !"Não informado.".equals(urlP)) {
+                if (!"Not specified.".equals(url) && !"Not specified.".equals(urlP)) {
                     httpPostConnection httpP = new httpPostConnection();
                     httpP.hConnect(url, urlP);
                 } else {
-                    System.out.println("Necessário informar todos os parametros obrigatórios.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
 
                 }
                 break;
             case 3:
-                if (!"Não informado.".equals(url)) {
+                if (!"Not specified.".equals(url)) {
                     httpGetConnection httpG = new httpGetConnection();
                     httpG.hConnect(url);
                 } else {
-                    System.out.println("Necessário informar todos os parametros obrigatórios.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
                 }
                 break;
             case 4:
-                if (!"Não informado.".equals(host) && !"Não informado.".equals(port)) {
+                if (!"Not specified.".equals(host) && !"Not specified.".equals(port)) {
                     socketConnection socket = new socketConnection();
                     socket.socketM(host, Integer.parseInt(port));
                 } else {
-                    System.out.println("Necessário informar todos os parametros obrigatórios.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
                 }
                 break;
             case 5:
-                if (!"Não informado.".equals(usr) && !"Não informado.".equals(pwd) && !"Não informado.".equals(host)) {
+                if (!"Not specified.".equals(usr) && !"Not specified.".equals(pwd) && !"Not specified.".equals(host)) {
                     smbConnection smb = new smbConnection();
                     if (!host.contains("\\\\")) {
                         host = "\\\\" + host;
                     }
                     smb.smbInit(usr, pwd, host);
                 } else {
-                    System.out.println("Necessário informar todos os parametros obrigatórios.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
                 }
                 break;
             case 6:
-                if (!"Não informado.".equals(host) && !"Não informado.".equals(port) && !"Não informado.".equals(prot) && !"Não informado.".equals(prot) && !"Não informado.".equals(rem) && !"Não informado.".equals(des) && !"Não informado.".equals(pwd)) {
+                if (!"Not specified.".equals(host) && !"Not specified.".equals(port) && !"Not specified.".equals(prot) && !"Not specified.".equals(prot) && !"Not specified.".equals(rem) && !"Not specified.".equals(des) && !"Not specified.".equals(pwd)) {
                     smtpConnection smtp = new smtpConnection();
-                    smtp.smtpH(host, port, prot, rem, des, pwd, stls, aut, tmsg, pmsg);
+                    
+                    smtp.smtpH(host, port, prot, rem, des, pwd, stls, aut, tmsg, pmsg, qtdm);
+                    
                 } else {
-                    System.out.println("Necessário informar todos os parametros obrigatórios.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
                 }
                 break;
             case 7:
-                if (!"Não informado.".equals(url) && !"Não informado.".equals(usr) && !"Não informado.".equals(pwd)) {
+                if (!"Not specified.".equals(url) && !"Not specified.".equals(usr) && !"Not specified.".equals(pwd)) {
                     oracledbConnection db = new oracledbConnection();
                     db.databaseM(url, usr, pwd);
                 } else {
-                    System.out.println("Necessário informar todos os parametros obrigatórios.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
                 }
                 break;
             case 8:
-                if (!"Não informado.".equals(url) && !"Não informado.".equals(usr) && !"Não informado.".equals(pwd)) {
+                if (!"Not specified.".equals(url) && !"Not specified.".equals(usr) && !"Not specified.".equals(pwd)) {
                     microsoftdbConnection db = new microsoftdbConnection();
                     db.databaseM(url, usr, pwd);
                 } else {
-                    System.out.println("Necessário informar todos os parametros obrigatórios.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
                 }
                 break;
             case 9:
-                if (!"Não informado.".equals(url) && !"Não informado.".equals(usr) && !"Não informado.".equals(pwd)) {
+                if (!"Not specified.".equals(url) && !"Not specified.".equals(usr) && !"Not specified.".equals(pwd)) {
                     mysqldbConnection db = new mysqldbConnection();
                     db.databaseM(url, usr, pwd);
                 } else {
-                    System.out.println("Necessário informar todos os parametros obrigatórios.");
-                    System.out.println("Pressione enter para continuar.");
-                    input(false, false);
+                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
                 }
                 break;
             case 10:
-                System.out.println("Não há necessidade de parâmetrizar este módulo.");
+                System.out.println("No need to parameterize this module.");
                 break;
             case 11:
-                System.out.println("Não há necessidade de parâmetrizar este módulo.");
+                System.out.println("No need to parameterize this module.");
                 break;
             case 12:
-                System.out.println("Não há necessidade de parâmetrizar este módulo.");
+                System.out.println("No need to parameterize this module.");
                 break;
         }
     }
@@ -494,133 +676,174 @@ public class Main {
 
         switch (modulo) {
 
-            case 1:
-                System.out.println("Não há necessidade de parâmetrizar este módulo.");
-                break;
             case 2:
-                System.out.println("*URL (url): " + url);
-                System.out.println("*Complemento da URL (urlP): " + urlP);
+                displayCom(2);
+                displayHpPar();
+                System.out.println("   *URL (url):                       " + url);
+                System.out.println("   *URL extension (urlP):            " + urlP+"\n");
                 break;
             case 3:
-                System.out.println("*URL (url): " + url);
+                displayCom(2);
+                displayHpPar();
+                System.out.println("   *URL (url):                       " + url+"\n");
                 break;
             case 4:
-                System.out.println("*Maquina (host): " + host);
-                System.out.println("*Porta (port): " + port);
+                displayCom(2);
+                displayHpPar();
+                System.out.println("   *Server\\Machine (host):           " + host);
+                System.out.println("   *Port (port):                     " + port+"\n");
                 break;
             case 5:
-                System.out.println("*Maquina (host): " + host);
-                System.out.println("*Usuário (usr): " + usr);
-                System.out.println("*Senha (pwd): " + pwd);
+                displayCom(2);
+                displayHpPar();
+                System.out.println("   *Server\\Machine (host):           " + host);
+                System.out.println("   *User (usr):                      " + usr);
+                System.out.println("   *Password (pwd):                  " + pwd+"\n");
                 break;
             case 6:
-                System.out.println("*Maquina (host): " + host);
-                System.out.println("*Porta (port): " + port);
-                System.out.println(" STARTTLS (stls): " + stls);
-                System.out.println(" Autenticação (aut): " + aut);
-                System.out.println("*Protocolo (prot): " + prot);
-                System.out.println("*Remetente (rem): " + rem);
-                System.out.println("*Senha (pwd): " + pwd);
-                System.out.println("*Destinatário (des): " + des);
-                System.out.println(" Titulo (tmsg): " + tmsg);
-                System.out.println(" Corpo (pmsg): " + pmsg);
+                displayCom(2);
+                displayHpPar();
+                System.out.println("   *Server\\Machine (host):           " + host);
+                System.out.println("   *Port (port):                     " + port);
+                System.out.println("    STARTTLS (stls):                 " + stls);
+                System.out.println("    Authentication (aut):            " + aut);
+                System.out.println("   *Protocol (prot):                 " + prot);
+                System.out.println("   *Sender (rem):                    " + rem);
+                System.out.println("   *Password (pwd):                  " + pwd);
+                System.out.println("   *Recipient (des):                 " + des);
+                System.out.println("    Title (tmsg):                    " + tmsg);
+                System.out.println("    Subject (pmsg):                  " + pmsg);
+                System.out.println("    Number of emails (qtdm):         " + qtdm+"\n");
                 break;
             case 7:
-                System.out.println("*URL (url): " + url);
-                System.out.println("*Usuario (usr): " + usr);
-                System.out.println("*Senha (pwd): " + pwd);
+                displayCom(2);
+                displayHpPar();
+                System.out.println("   *URL (url):                       " + url);
+                System.out.println("   *User (usr):                      " + usr);
+                System.out.println("   *Password (pwd):                  " + pwd+"\n");
                 break;
             case 8:
-                System.out.println("*URL (url): " + url);
-                System.out.println("*Senha (pwd): " + pwd);
-                System.out.println("*Usuario (usr): " + usr);
+                displayCom(2);
+                displayHpPar();
+                System.out.println("   *URL (url):                       " + url);
+                System.out.println("   *Password (pwd):                  " + pwd);
+                System.out.println("   *User (usr):                      " + usr+"\n");
                 break;
             case 9:
-                System.out.println("*URL (url): " + url);
-                System.out.println("*Senha (pwd): " + pwd);
-                System.out.println("*Usuario (usr): " + usr);
+                displayCom(2);
+                displayHpPar();
+                System.out.println("   *URL (url):                       " + url);
+                System.out.println("   *Password (pwd):                  " + pwd);
+                System.out.println("   *User (usr):                      " + usr+"\n");
                 break;
             case 10:
-                System.out.println("Não há necessidade de parâmetrizar este módulo.");
+                displayCom(2);
+                displayHpPar();
+                System.out.println("No need to parameterize this module.");
                 break;
             case 11:
-                System.out.println("Não há necessidade de parâmetrizar este módulo.");
+                displayCom(2);
+                displayHpPar();
+                System.out.println("No need to parameterize this module.");
                 break;
             case 12:
-                System.out.println("Não há necessidade de parâmetrizar este módulo.");
+                displayCom(2);
+                displayHpPar();
+                System.out.println("No need to parameterize this module.");
                 break;
         }
     }
 
-    private static void jvmInfo() throws IOException {
-
+    private static void jvmInfo_classLoadingMXBean() throws IOException {
         ClassLoadingMXBean classLoadingMXBean = ManagementFactory.getClassLoadingMXBean();
-        GarbageCollectorMXBean garbageCollectorMXBean = ManagementFactory.getGarbageCollectorMXBeans().get(0); // Pegando o primeiro GarbageCollectorMXBean
-        CompilationMXBean compilationMXBean = ManagementFactory.getCompilationMXBean();
-        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        Runtime runtime = Runtime.getRuntime();
-        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
-        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
-
-        // Exibindo algumas informações da JVM
-        System.out.println("Informações da JVM:");
         System.out.println("Class Loading:");
-        System.out.println("  Total de classes carregadas (classLoadingMXBean): " + classLoadingMXBean.getTotalLoadedClassCount());
-        System.out.println("  Total de classes descarregadas (classLoadingMXBean): " + classLoadingMXBean.getUnloadedClassCount());
+        System.out.println("  Total loaded classes (classLoadingMXBean): : " + classLoadingMXBean.getTotalLoadedClassCount());
+        System.out.println("  Total unloaded classes (classLoadingMXBean): " + classLoadingMXBean.getUnloadedClassCount());
+    }
+    
+    private static void jvmInfo_garbageCollectorMXBean() throws IOException {
+        GarbageCollectorMXBean garbageCollectorMXBean = ManagementFactory.getGarbageCollectorMXBeans().get(0); // Pegando o primeiro GarbageCollectorMXBean
         System.out.println("Garbage Collection:");
-        System.out.println("  Nome do coletor (garbageCollectorMXBean): " + garbageCollectorMXBean.getName());
-        System.out.println("  Número de coletas (garbageCollectorMXBean): " + garbageCollectorMXBean.getCollectionCount());
-        System.out.println("  Tempo gasto em coleta (garbageCollectorMXBean em ms): " + garbageCollectorMXBean.getCollectionTime());
+        System.out.println("  Collector name (garbageCollectorMXBean): " + garbageCollectorMXBean.getName());
+        System.out.println("  Number of collections (garbageCollectorMXBean): " + garbageCollectorMXBean.getCollectionCount());
+        System.out.println("  Collection time (garbageCollectorMXBean in ms): " + garbageCollectorMXBean.getCollectionTime());    
+    }
+    
+    private static void jvmInfo_compilationMXBean() throws IOException {
+        CompilationMXBean compilationMXBean = ManagementFactory.getCompilationMXBean();
         System.out.println("Compilation:");
-        System.out.println("  Nome do compilador (compilationMXBean): " + compilationMXBean.getName());
+        System.out.println("  Compiler name (compilationMXBean): " + compilationMXBean.getName());
+    }
+    
+    private static void jvmInfo_threadMXBean() throws IOException {
+        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
         System.out.println("Threads:");
-        System.out.println("  Número de threads ativas (threadMXBean): " + threadMXBean.getThreadCount());
-        System.out.println("  Pico de threads (threadMXBean): " + threadMXBean.getPeakThreadCount());
+        System.out.println("  Number of active threads (threadMXBean): " + threadMXBean.getThreadCount());
+        System.out.println("  Peak threads (threadMXBean): " + threadMXBean.getPeakThreadCount());
+    }
+    
+    private static void jvmInfo_availableProcessors() throws IOException {
+        Runtime runtime = Runtime.getRuntime();
         System.out.println("Runtime:");
-        System.out.println("  Processadores disponíveis (runtime.availableProcessors()): " + runtime.availableProcessors());
+        System.out.println("  Available processors (runtime.availableProcessors()): " + runtime.availableProcessors());    
+    }
+    
+    private static void jvmInfo_operatingSystemMXBean() throws IOException {
+        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
         System.out.println("Operating System:");
-        System.out.println("  Nome do SO (operatingSystemMXBean): " + operatingSystemMXBean.getName());
-        System.out.println("  Versão do SO (operatingSystemMXBean): " + operatingSystemMXBean.getVersion());
-        System.out.println("Memoria da JVM:");
-        System.out.println("  Uso de memória não inicializada: " + memoryMXBean.getHeapMemoryUsage());
-        LocalDateTime agora = LocalDateTime.now();
+        System.out.println("  OS name (operatingSystemMXBean): " + operatingSystemMXBean.getName());
+        System.out.println("  OS version (operatingSystemMXBean): " + operatingSystemMXBean.getVersion());    
+    }
+    
+    private static void jvmInfo_memoryMXBean(){
+        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+                System.out.println("JVM Memory:");
+        System.out.println("  Uninitialized memory usage: " + memoryMXBean.getHeapMemoryUsage());
+    }
+    
+    private static void jvmInfo_time(){
+        
+            LocalDateTime agora = LocalDateTime.now();
 
         // Formatando a data e hora conforme desejado
         DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         String dataFormatada = agora.format(formatador);
 
         // Exibindo a data e hora
-        System.out.println("Data e hora local (JVM): " + dataFormatada);
+        System.out.println("Local date and time (JVM): " + dataFormatada);
         horario();
-        java_home();
-        jvm_opt();
-
-        String input = "";
-
-        while (!"exit".equals(input.toLowerCase())) {
-            input = "";
-            input = input(true, false);
-            command(input, 1);
-        }
-
+    }
+    
+    private static void jvmInfo_all() throws IOException {
+        System.out.println("JVM Information:");
+        jvmInfo_classLoadingMXBean();
+        jvmInfo_garbageCollectorMXBean();
+        jvmInfo_compilationMXBean();
+        jvmInfo_threadMXBean();
+        jvmInfo_availableProcessors();
+        jvmInfo_operatingSystemMXBean();
+        jvmInfo_memoryMXBean();
+        jvmInfo_time();
+        jvmInfo_java_home();
+        jvmInfo_jvm_opt();
     }
 
-    public static void java_home() {
+    public static void jvmInfo_java_home() {
         String javaHome = System.getProperty("java.home");
 
         if (javaHome != null && !javaHome.isEmpty()) {
-            System.out.println("Local de instalação do Java: " + javaHome);
+            System.out.println("Java installation directory: " + javaHome);
         } else {
-            System.out.println("Local de instalação do Java não encontrado.");
+            System.out.println("Java installation directory not found.");
         }
 
     }
 
-    public static void jvm_opt() {
+    public static void jvmInfo_jvm_opt() {
         RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
         List<String> parametros = runtimeMXBean.getInputArguments();
 
-        System.out.println("Parâmetros da JVM:");
+        System.out.println("JVM Parameters:");
         for (String parametro : parametros) {
             System.out.println(parametro);
         }
@@ -634,7 +857,7 @@ public class Main {
         } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
             obterDataHoraLinux();
         } else {
-            System.out.println("Sistema operacional não suportado.");
+            System.out.println("Unsupported operating system.");
         }
     }
 
@@ -650,7 +873,7 @@ public class Main {
 
             String hora = leitorHora.readLine();
 
-            System.out.println("Data e hora local (Windows): " + data + " " + hora);
+            System.out.println("Local date and time (Windows): " + data + " " + hora);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -663,11 +886,103 @@ public class Main {
             BufferedReader leitor = new BufferedReader(new InputStreamReader(processo.getInputStream()));
 
             String dataHora = leitor.readLine();
-            System.out.println("Data e hora local (Linux): " + dataHora);
+            System.out.println("Local date and time (Linux): " + dataHora);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    
+        public static void getSysUserHostname() {
+        // Obtendo o nome do usuário
+        
+        // Obtendo o nome da máquina
 
+        
+        if (sysName.contains("win")) {
+            // Para Windows
+            machineName = System.getenv("COMPUTERNAME");
+        } else if (sysName.contains("nix") || sysName.contains("nux") || sysName.contains("aix")) {
+            // Para Linux/Unix
+            machineName = executeCommand("hostname");
+        } else if (sysName.contains("mac")) {
+            // Para MacOS
+            machineName = executeCommand("hostname");
+        } else {
+            machineName = "Unable to retrieve the machine name.";
+        }
+        
+    }
+    
+    // Método para executar comandos no terminal
+    public static String executeCommand(String command) {
+        try {
+            Process process = Runtime.getRuntime().exec(command);
+            java.util.Scanner s = new java.util.Scanner(process.getInputStream()).useDelimiter("\\A");
+            return s.hasNext() ? s.next().trim() : "";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Unable to retrieve the machine name.";
+        }
+    }
+    
+    private static void readTextFile() throws IOException {
+        Map<String, String> configMap = readConfigFile();
+
+        if (configMap != null) {
+            // Exemplo de uso das variáveis configuradas
+            host = configMap.get("host");
+            port = configMap.get("port");
+            aut = configMap.get("aut");
+            stls = configMap.get("stls");
+            prot = configMap.get("prot");
+            rem = configMap.get("rem");
+            des = configMap.get("des");
+            pwd = configMap.get("pwd");
+            url = configMap.get("url");
+            usr = configMap.get("usr");
+            tmsg = configMap.get("tmsg");
+            pmsg = configMap.get("pmsg");
+            qtdm = configMap.get("qtdm");
+
+            for (Map.Entry<String, String> entry : configMap.entrySet()) {
+                System.out.println(entry.getKey() + ": " + entry.getValue());
+            }
+        } else {
+            System.out.println("Could not read the file 'input.nta'.");
+        }
+    }
+       
+    private static Map <String, String> readConfigFile (){
+        
+        Map<String, String> configMap = new HashMap<>();
+        try {
+            // Obtém o caminho para o diretório onde o JAR está sendo executado
+            Path jarPath = Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            String txtFolderPath = jarPath.getParent().resolve("txt").toString();
+
+            // Caminho completo para o arquivo de configuração
+            String configFilePath = txtFolderPath + File.separator + "input.nta";
+
+            // Lê o arquivo de configuração
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(configFilePath), StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(":");
+                    if (parts.length == 2) {
+                        String key = parts[0].trim();
+                        String value = parts[1].trim();
+                        configMap.put(key, value);
+                    }
+                }
+            }
+        } catch (URISyntaxException | FileNotFoundException e) {
+            System.err.println("File not found: " + e.getMessage());
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return configMap;
+    }
 }

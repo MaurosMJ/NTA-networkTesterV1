@@ -14,25 +14,25 @@ import javax.mail.internet.*;
  */
 public class smtpConnection {
     
-    public void smtpH (String host, String port, String prot, String rem, String des, String pwd, String stls, String aut, String tmsg, String pmsg){
-                // Configurações do servidor SMTP e das propriedades
-        // host = "smtp.example.com"; // Coloque o host SMTP correto
-        // int porta = 587; // Porta padrão para TLS
+    public void smtpH (String host, String port, String prot, String rem, String des, String pwd, String stls, String aut, String tmsg, String pmsg, String qtdm){
+        
+        int a;
+        if (!"1 (default)".equals(qtdm)&&!"0".equals(qtdm)){
+            a = Integer.parseInt(qtdm);
+        } else {
+            a = 1;
+        }
 
-        // final String usuario = "seuemail@example.com"; // Seu e-mail
-        // final String senha = "suasenha"; // Sua senha
-
-        // Propriedades para habilitar diferentes protocolos
         Properties props = new Properties();
         
-        if ("s".equals(aut.toLowerCase())||"s (default)".equals(aut.toLowerCase())){
+        if ("y".equals(aut.toLowerCase())||"y (default)".equals(aut.toLowerCase())){
         props.put("mail.smtp.auth", "true");
         }
         else {
         props.put("mail.smtp.auth", "false");    
         }
         
-        if ("s".equals(stls.toLowerCase())||"s (default)".equals(stls.toLowerCase())){
+        if ("y".equals(stls.toLowerCase())||"y (default)".equals(stls.toLowerCase())){
         props.put("mail.smtp.starttls.enable", "true");
         }
         else {
@@ -66,12 +66,15 @@ public class smtpConnection {
             mensagem.setText(pmsg);
 
             // Envio da mensagem
+            
+            for (int c = 0; c < a; a--){
             Transport.send(mensagem);
-
-            System.out.println("E-mail enviado com sucesso!");
+            }
+            
+            System.out.println("Email sent successfully!");
 
         } catch (MessagingException e) {
-            System.out.println("Erro ao enviar o e-mail: " + e.getMessage());
+            System.out.println("Error sending the email: " + e.getMessage());
         }
     }
 }

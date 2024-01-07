@@ -19,11 +19,11 @@ public class socketConnection {
         
         try {
             try (Socket socket = new Socket(host, porta)) {
-                System.out.println("Conexão bem-sucedida com " + host + ":" + porta);
+                System.out.println("Successful connection with " + host + ":" + porta);
                             socket.close();
             }
         } catch (IOException e) {
-            System.out.println("Não foi possível conectar a " + host + ":" + porta);
+            System.out.println("Unable to connect to " + host + ":" + porta);
                         e.printStackTrace();
         }
     }

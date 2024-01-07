@@ -23,10 +23,10 @@ public class microsoftdbConnection {
 
             // Estabelece a conexão com o banco de dados
             Connection conexao = DriverManager.getConnection(url, usr, pwd);
-            System.out.println("Conexão com o banco de dados estabelecida com sucesso!");
+            System.out.println("Database connection established successfully!");
             conexao.close();
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("Não foi possível conectar ao banco de dados.");
+            System.out.println("Unable to connect to the database.");
             e.printStackTrace();
         }
             

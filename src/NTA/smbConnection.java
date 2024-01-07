@@ -21,7 +21,7 @@ public class smbConnection {
         private final PrintStream printStream = new PrintStream(outputStream);
     
     public void smbInit (String user, String passW, String host){
-        System.out.println("Iniciando autenticação com o host destino.");
+        System.out.println("Initiating authentication with the target host.");
         
         host = host.replace("\\", "/");
         host = "smb:" + host + "/";
@@ -34,18 +34,18 @@ public class smbConnection {
             if (dir.exists() && dir.isDirectory()) {
                 
                 SmbFile[] files = dir.listFiles();
-                    System.out.println("INICIANDO BUSCA:");
-                    System.out.println("Pastas e arquivos no diretório:");
+                    System.out.println("INITIATING SEARCH:");
+                    System.out.println("Folders and files in the directory:");
                     for (SmbFile file : files) {
                         
-                        System.out.println(" Arquivo Encontrado: " + file.getName());
+                        System.out.println(" File Found: " + file.getName());
                     }
                    
             }
             
         } catch (Exception e) {
             
-            System.out.println("Ocorreu um erro ao autenticar e reconhecer os arquivos do diretório.");
+            System.out.println("An error occurred while authenticating and recognizing the files in the directory.");
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);

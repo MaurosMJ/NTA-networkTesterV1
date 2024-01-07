@@ -50,7 +50,7 @@ public class httpPostConnection {
         in.close();
 
         // Exibe a resposta
-        System.out.println("Resposta da requisição:");
+        System.out.println("Request response:");
         System.out.println(response.toString());
     }
 }

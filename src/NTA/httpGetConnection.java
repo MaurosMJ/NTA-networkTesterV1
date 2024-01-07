@@ -35,8 +35,8 @@ public class httpGetConnection {
             in.close();
 
             // Exibe a resposta
-            System.out.println("Código de resposta: " + responseCode);
-            System.out.println("Resposta:");
+            System.out.println("Response code: " + responseCode);
+            System.out.println("Response:");
             System.out.println(response.toString());
 
             // Fecha a conexão
