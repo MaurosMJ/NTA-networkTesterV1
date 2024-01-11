@@ -47,7 +47,7 @@ public class Main {
     private static String des = "Not specified.";
     private static String pwd = "Not specified.";
     private static String url = "Not specified.";
-    private static String urlP = "Not specified.";
+    private static String data = "";
     private static String usr = "Not specified.";
     private static String tmsg = "Email sent with a default title by the NTA.";
     private static String pmsg = "Email sent with a default subject by the NTA.";
@@ -57,7 +57,7 @@ public class Main {
     private static final String usrName = System.getProperty("user.name");
 
     public static void main(String[] args) throws IOException, FileNotFoundException {
-        
+     
         getSysUserHostname();
         telaModulos();
 
@@ -188,7 +188,7 @@ System.out.println("\nCore Framework\\Modules:" +
    "   \\smtp_protocol_connection\\javax.mail\\mail                             Establishes a connection with an SMTP (Simple Mail Transfer Protocol) server and sends an email using the provided context-specific variables via JVM.\n"+
    "   \\socket_Connetion\\java.net\\socket                                     Establishes a bidirectional TCP communication channel between a client and a server via JVM.\n"+
    "   \\httpPost_Request\\java.net\\hpost                                      Performs an HTTP POST request between a client and a web server via JVM.\n"+
-   "   \\httpGet_Request\\java.net\\hget                                        Performs an HTTP GET request between a client and a web server via JVM.\n"+
+ //"   \\httpGet_Request\\java.net\\hget                                        Performs an HTTP GET request between a client and a web server via JVM.\n"+
    "   \\txt\\input                                                            Through the file '\\NTA\\class\\txt\\input.nta', all global variables will be loaded.\n"
                     );
         
@@ -249,25 +249,27 @@ System.out.println("\nCore Commands:" +
         }
         return entrada;
     }
+    
+    private static void startModule(String lib, String module){
+        System.out.println("#"+lib+"."+module+"#");
+        System.out.println("############################################");
+        System.out.println("#   Module has been loaded successfully    #");
+        System.out.println("############################################\n");        
+    }
 
     private static void smtpMail() throws IOException {
-        System.out.println("\n######################");
-        System.out.println("### SMTP PROTOCOL  ###");
-        System.out.println("######################\n");
-
+        System.out.println("\n####      SMTP (Simple Mail Transfer Protocol)      ####\n");
         String input = "";
-
         while (!"exit".equals(input.toLowerCase())) {
             input = "";
             input = input(true, false, "[SMTP Protocol] > ");
             command(input, 6);
 
-            //System.out.print("Confirmar configurações (S|N)? "); run = input ();
         }
     }
 
     private static void httpPost() throws IOException {
-        System.out.println("\nHTTP POST REQUEST:\n");
+        System.out.println("\n####      HTTP POST Request      ####\n");
         String input = "";
 
         while (!"exit".equals(input.toLowerCase())) {
@@ -280,7 +282,7 @@ System.out.println("\nCore Commands:" +
     }
 
     private static void httpGET() throws IOException {
-        System.out.println("\nHTTP POST GET:\n");
+                System.out.println("\n####      HTTP GET Request      ####\n");
 
         String input = "";
 
@@ -293,7 +295,7 @@ System.out.println("\nCore Commands:" +
     }
 
     private static void socket() throws IOException {
-        System.out.println("\nSOCKET CONNECTION:\n");
+                        System.out.println("\n####      Socket Connection      ####\n");
 
         String input = "";
 
@@ -307,7 +309,7 @@ System.out.println("\nCore Commands:" +
     }
 
     private static void smbProtocol() throws IOException {
-        System.out.println("\nSMB CONNECTION:\n");
+                        System.out.println("\n####      SMB (Server Message Block) Connection      ####\n");
 
         String input = "";
 
@@ -321,7 +323,7 @@ System.out.println("\nCore Commands:" +
     }
 
     private static void databaseORA() throws IOException {
-        System.out.println("\nORACLE - DATABASE CONNECTION:\n");
+                                System.out.println("\n####      ORACLE database Connection      ####\n");
 
         String input = "";
         while (!"exit".equals(input.toLowerCase())) {
@@ -333,7 +335,7 @@ System.out.println("\nCore Commands:" +
     }
 
     private static void databaseMS() throws IOException {
-        System.out.println("\nMICROSOFT SQL SERVER - DATABASE CONNECTION:\n");
+        System.out.println("\n####      MICROSOFT SQL SERVER Connection      ####\n");
 
         String input = "";
         while (!"exit".equals(input.toLowerCase())) {
@@ -345,7 +347,7 @@ System.out.println("\nCore Commands:" +
     }
 
     private static void databaseMY() throws IOException {
-        System.out.println("\nMYSQL - DATABASE CONNECTION:\n");
+        System.out.println("\n####      MYSQL Connection      ####\n");
 
         String input = "";
         while (!"exit".equals(input.toLowerCase())) {
@@ -422,6 +424,7 @@ System.out.println("\nCore Commands:" +
                 
                 if(set){
                 rem = input(true, false, "[Set rem] > ");
+                des = rem;
                 break;
                 } else{
                 rem = "Not specified.";
@@ -431,6 +434,7 @@ System.out.println("\nCore Commands:" +
                 
                 if (set){
                 des = input(true, false, "[Set des] > ");
+                
                 break;
                 } else {
                 des = "Not specified.";    
@@ -454,13 +458,13 @@ System.out.println("\nCore Commands:" +
                 url = "Not specified.";
                 }
             
-            case "urlP":
+            case "data":
                 
                 if (set){
-                urlP = input(true, false, "[Set urlP] > ");
+                data = input(true, false, "[Set data] > ");
                 break;
                 } else{
-                urlP = "Not specified.";
+                data = "Not specified.";
                 }
             
             case "usr":
@@ -540,7 +544,10 @@ System.out.println("\nCore Commands:" +
             String var = trataCampo(command, "set"); // REMOVE A PALAVRA "SET"
             atualizaValor(var,true);
         } else if (command.toLowerCase().contains("run")) {
+            System.out.println("\nStarting module..");
+      System.out.println("...");
             runIt(modulo);
+            System.out.println(""); 
         } else if (command.toLowerCase().contains("unset")&&command.toLowerCase().startsWith("un")) {
                        String var = trataCampo(command, "unset"); // REMOVE A PALAVRA "unset"
             atualizaValor(var,false); 
@@ -556,6 +563,7 @@ System.out.println("\nCore Commands:" +
             telaModulos();
         } else {
             System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+            
             input(false, false, "[Enter] > ");
         }
     }
@@ -565,11 +573,12 @@ System.out.println("\nCore Commands:" +
         switch (modulo) {
 
             case 2:
-                if (!"Not specified.".equals(url) && !"Not specified.".equals(urlP)) {
+                if (!"Not specified.".equals(url)) {
                     httpPostConnection httpP = new httpPostConnection();
-                    httpP.hConnect(url, urlP);
+                    startModule("        java.net","httpPost_Request         "); 
+                    httpP.hConnect(url, data);
                 } else {
-                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                     input(false, false, "[Enter] > ");
 
                 }
@@ -577,68 +586,74 @@ System.out.println("\nCore Commands:" +
             case 3:
                 if (!"Not specified.".equals(url)) {
                     httpGetConnection httpG = new httpGetConnection();
+                    startModule("         java.net","httpGet_Request         ");
                     httpG.hConnect(url);
                 } else {
-                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                     input(false, false, "[Enter] > ");
                 }
                 break;
             case 4:
                 if (!"Not specified.".equals(host) && !"Not specified.".equals(port)) {
                     socketConnection socket = new socketConnection();
+                    startModule("             java.net","socket              ");
                     socket.socketM(host, Integer.parseInt(port));
                 } else {
-                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                     input(false, false, "[Enter] > ");
                 }
                 break;
             case 5:
                 if (!"Not specified.".equals(usr) && !"Not specified.".equals(pwd) && !"Not specified.".equals(host)) {
                     smbConnection smb = new smbConnection();
+                    startModule("                jcifs","smb                 ");
                     if (!host.contains("\\\\")) {
                         host = "\\\\" + host;
                     }
                     smb.smbInit(usr, pwd, host);
                 } else {
-                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                     input(false, false, "[Enter] > ");
                 }
                 break;
             case 6:
                 if (!"Not specified.".equals(host) && !"Not specified.".equals(port) && !"Not specified.".equals(prot) && !"Not specified.".equals(prot) && !"Not specified.".equals(rem) && !"Not specified.".equals(des) && !"Not specified.".equals(pwd)) {
                     smtpConnection smtp = new smtpConnection();
-                    
+                    startModule("                 javax","mail               ");
                     smtp.smtpH(host, port, prot, rem, des, pwd, stls, aut, tmsg, pmsg, qtdm);
                     
                 } else {
-                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                     input(false, false, "[Enter] > ");
                 }
                 break;
             case 7:
                 if (!"Not specified.".equals(url) && !"Not specified.".equals(usr) && !"Not specified.".equals(pwd)) {
                     oracledbConnection db = new oracledbConnection();
+                    startModule("      jdbc.driver.OracleDriver ","oracle    ");
                     db.databaseM(url, usr, pwd);
                 } else {
-                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                     input(false, false, "[Enter] > ");
                 }
                 break;
             case 8:
                 if (!"Not specified.".equals(url) && !"Not specified.".equals(usr) && !"Not specified.".equals(pwd)) {
                     microsoftdbConnection db = new microsoftdbConnection();
+                    startModule("       jdbc.SQLServerDriver","mserver       ");
                     db.databaseM(url, usr, pwd);
                 } else {
-                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                     input(false, false, "[Enter] > ");
                 }
                 break;
             case 9:
                 if (!"Not specified.".equals(url) && !"Not specified.".equals(usr) && !"Not specified.".equals(pwd)) {
                     mysqldbConnection db = new mysqldbConnection();
+                    startModule("        mysql.cj.jdbc.Driver","mysql        ");
                     db.databaseM(url, usr, pwd);
                 } else {
-                    System.out.println("Invalid value for this module parameter. Press [Enter] to continue:");
+                    System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                     input(false, false, "[Enter] > ");
                 }
                 break;
@@ -680,7 +695,7 @@ System.out.println("\nCore Commands:" +
                 displayCom(2);
                 displayHpPar();
                 System.out.println("   *URL (url):                       " + url);
-                System.out.println("   *URL extension (urlP):            " + urlP+"\n");
+                System.out.println("    Data (data):                     " + data+"\n");
                 break;
             case 3:
                 displayCom(2);
@@ -710,7 +725,7 @@ System.out.println("\nCore Commands:" +
                 System.out.println("   *Protocol (prot):                 " + prot);
                 System.out.println("   *Sender (rem):                    " + rem);
                 System.out.println("   *Password (pwd):                  " + pwd);
-                System.out.println("   *Recipient (des):                 " + des);
+                System.out.println("    Recipient (des):                 " + des);
                 System.out.println("    Title (tmsg):                    " + tmsg);
                 System.out.println("    Subject (pmsg):                  " + pmsg);
                 System.out.println("    Number of emails (qtdm):         " + qtdm+"\n");
@@ -953,7 +968,7 @@ System.out.println("\nCore Commands:" +
         }
     }
        
-    private static Map <String, String> readConfigFile (){
+    private static Map <String, String> readConfigFile (){ 
         
         Map<String, String> configMap = new HashMap<>();
         try {

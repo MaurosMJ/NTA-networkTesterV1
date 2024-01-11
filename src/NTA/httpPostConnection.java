@@ -21,7 +21,7 @@ public class httpPostConnection {
     
     public void hConnect (String url , String urlParameters ) throws MalformedURLException, IOException {
         // URL e parâmetros
-
+       try {
         // Criação da conexão
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -52,5 +52,13 @@ public class httpPostConnection {
         // Exibe a resposta
         System.out.println("Request response:");
         System.out.println(response.toString());
+                } catch (MalformedURLException e) {
+            System.err.println("URL mal formado: " + e.getMessage());
+            // Você pode lidar com isso de outras maneiras, como logar o erro ou notificar o usuário.
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Erro de IO: " + e.getMessage());
+            // Trate outras exceções de IO aqui, se necessário.
+        }
     }
 }
