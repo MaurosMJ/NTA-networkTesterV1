@@ -52,12 +52,13 @@ public class Main {
     private static String tmsg = "Email sent with a default title by the NTA.";
     private static String pmsg = "Email sent with a default subject by the NTA.";
     private static String qtdm = "1 (default)";
+    private static String dmn = "Not specified.";
     private static String machineName = "";
     private static final String sysName = System.getProperty("os.name").toLowerCase();
     private static final String usrName = System.getProperty("user.name");
 
     public static void main(String[] args) throws IOException, FileNotFoundException {
-     
+        
         getSysUserHostname();
         telaModulos();
 
@@ -151,8 +152,8 @@ public class Main {
                     break;
                 case "input":
                     readTextFile();;
-                case "11":
-                    break;
+                case "smbrw":
+                    smbRW();
                 case "12":
                     break;
 
@@ -185,6 +186,7 @@ System.out.println("\nCore Framework\\Modules:" +
    "   \\database\\jdbc.driver.OracleDriver\\oracle                             Establishes a connection with a ORACLE database using the proprietary driver.\n"+
    "   \\database\\microsoft.sqlserver.jdbc.SQLServerDriver\\mserver            Establishes a connection with a MICROSOFT SQL SERVER database using the proprietary driver.\n"+
    "   \\smb_connection\\jcifs\\smb                                             Establishes a SMB (Server Message Block) connection with a file server (Storage NAS) and lists all files in the primary directory via JVM.\n"+
+   "   \\smb_connection\\jcifs\\smbRW                                           Establishes an SMB (Server Message Block) connection with a file server (NAS Storage), sends a text file to a directory, reads the text file on the server, and returns this information to the client for validation of write and read permissions in the directory.\n"+
    "   \\smtp_protocol_connection\\javax.mail\\mail                             Establishes a connection with an SMTP (Simple Mail Transfer Protocol) server and sends an email using the provided context-specific variables via JVM.\n"+
    "   \\socket_Connetion\\java.net\\socket                                     Establishes a bidirectional TCP communication channel between a client and a server via JVM.\n"+
    "   \\httpPost_Request\\java.net\\hpost                                      Performs an HTTP POST request between a client and a web server via JVM.\n"+
@@ -343,6 +345,17 @@ System.out.println("\nCore Commands:" +
             input = input(true, false, "[Tabular Data Stream] > ");
             command(input, 8);
 
+        }
+    }
+    
+    private static void smbRW() throws IOException{
+        System.out.println("\n####            SmbRW           ####\n");
+        
+        String input = "";
+        while (!"exit".equals(input.toLowerCase())) {
+            input = "";
+            input = input(true, false, "[Smb Protocol] > ");
+            command(input, 10);
         }
     }
 
@@ -520,6 +533,15 @@ System.out.println("\nCore Commands:" +
                 pmsg = "Not specified.";
                 }
                 break;
+                
+            case "dmn":
+                
+                if (set){
+                dmn = input(true, false, "[Set dmn] > ");
+                } else {
+                dmn = "Not specified.";
+                }
+                break;
 
             case "exit":
                 System.exit(0);
@@ -610,7 +632,7 @@ System.out.println("\nCore Commands:" +
                     if (!host.contains("\\\\")) {
                         host = "\\\\" + host;
                     }
-                    smb.smbInit(usr, pwd, host);
+                    smb.smb(usr, pwd, host);
                 } else {
                     System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                     input(false, false, "[Enter] > ");
@@ -658,7 +680,14 @@ System.out.println("\nCore Commands:" +
                 }
                 break;
             case 10:
-                System.out.println("No need to parameterize this module.");
+                if (!"Not specified.".equals(usr) && !"Not specified.".equals(pwd) && !"Not specified.".equals(host) && !"Not specified.".equals(dmn)) {
+                    smbConnection smb = new smbConnection();
+                    startModule("                jcifs","smbRW               ");
+                    smb.smbRW(usr, pwd, host, dmn);
+                } else {
+                    System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
+                    input(false, false, "[Enter] > ");
+                }
                 break;
             case 11:
                 System.out.println("No need to parameterize this module.");
@@ -754,7 +783,10 @@ System.out.println("\nCore Commands:" +
             case 10:
                 displayCom(2);
                 displayHpPar();
-                System.out.println("No need to parameterize this module.");
+                System.out.println("   *Server\\Machine (host):           " + host);
+                System.out.println("   *User (usr):                      " + usr);
+                System.out.println("   *Domain (dmn):                    " + dmn);
+                System.out.println("   *Password (pwd):                  " + pwd+"\n");
                 break;
             case 11:
                 displayCom(2);

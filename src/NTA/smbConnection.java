@@ -9,8 +9,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
+import jcifs.smb.SmbFileInputStream;
+import jcifs.smb.SmbFileOutputStream;
 
 /**
  *
@@ -19,8 +23,53 @@ import jcifs.smb.SmbFile;
 public class smbConnection {
         private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         private final PrintStream printStream = new PrintStream(outputStream);
+        
+    public void smbRW (String user, String passW, String host, String domain){
+        
+        System.out.println("Iniciando autenticação com o host de destino.");
+
+        host = host.replace("\\", "/");
+        host = "smb:" + host;
+        
+        // Criar um nome de arquivo com timestamp
+        String timestamp = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ssss").format(new Date());
+        String nomeArquivo = "/smbRW-" + timestamp.replaceAll("[: ]", "") + ".txt";
+        host += nomeArquivo+"/";
+        System.out.println(host);
+
+        
+        try {
+            NtlmPasswordAuthentication autenticacao = new NtlmPasswordAuthentication(domain, user, passW);
+            SmbFile arquivoRemoto = new SmbFile(host, autenticacao);
+            SmbFileOutputStream streamSaida = new SmbFileOutputStream(arquivoRemoto);
+            byte[] conteudo = "File content: This is a text file.".getBytes(); // Substitua pelo conteúdo do seu arquivo
+            streamSaida.write(conteudo);
+            streamSaida.close();
+            System.out.println("[WRITE = OK] File successfully sent to the server!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        // Ler arquivo do servidor de arquivos
+        try {
+            NtlmPasswordAuthentication autenticacao = new NtlmPasswordAuthentication(domain, user, passW);
+            SmbFile arquivoRemoto = new SmbFile(host, autenticacao);
+            SmbFileInputStream streamEntrada = new SmbFileInputStream(arquivoRemoto);
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            StringBuilder conteudoArquivo = new StringBuilder();
+            while ((bytesRead = streamEntrada.read(buffer)) != -1) {
+                conteudoArquivo.append(new String(buffer, 0, bytesRead));
+            }
+            streamEntrada.close();
+            System.out.println("[READ = OK] File content read from the server: \n" + conteudoArquivo.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+    }
     
-    public void smbInit (String user, String passW, String host){
+    public void smb (String user, String passW, String host){
         System.out.println("Initiating authentication with the target host.");
         
         host = host.replace("\\", "/");
