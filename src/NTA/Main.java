@@ -56,6 +56,11 @@ public class Main {
     private static String machineName = "";
     private static final String sysName = System.getProperty("os.name").toLowerCase();
     private static final String usrName = System.getProperty("user.name");
+    
+    private static String mhost = "Not specified.";
+    private static String mpwd = "Not specified.";
+    private static String shost = "Not specified.";
+    private static String spwd = "Not specified.";
 
     public static void main(String[] args) throws IOException, FileNotFoundException {
         
@@ -382,13 +387,19 @@ System.out.println("\nCore Commands:" +
 
     }
 
-    private static void atualizaValor(String var, boolean set) {
+    private static void atualizaValor(String var, boolean set, int module) {
 
         //if(set){System.out.println("Defina um valor para " + var + ": ");}
         switch (var) {
             case "host":
                 if(set){
-                host = input(true, false, "[Set host] > ");
+                    if (module == 5 || module == 10){
+                        shost = input(true, false, "[Set host (SMB)] > "); 
+                    } else if (module == 6) {
+                        mhost = input(true, false, "[Set host (mail)] > ");
+                    } else {
+                        host = input(true, false, "[Set host] > ");
+                    }
                 break;
                 }else{
                 host = "Not specified.";    
@@ -403,7 +414,7 @@ System.out.println("\nCore Commands:" +
                     input(false, false, "[Enter] > ");
                 }
                 } else {
-                host = "Not specified.";
+                port = "Not specified.";
                 }
                 break;
                 
@@ -416,7 +427,7 @@ System.out.println("\nCore Commands:" +
                     input(false, false, "[Enter] > ");
                 }
                 } else {
-                host = "Not specified.";
+                qtdm = "Not specified.";
                 }
                 break;
 
@@ -456,7 +467,14 @@ System.out.println("\nCore Commands:" +
             case "pwd":
                 
                 if (set){
-                pwd = input(false, false, "[Set pwd] > ");
+                    
+                    if(module == 5 || module == 10){
+                        spwd = input(false, false, "[Set pwd (SMB)] > ");
+                    } else if (module == 6){
+                        mpwd = input(false, false, "[Set pwd (MAIL)] > ");
+                    } else {
+                        pwd = input(false, false, "[Set pwd] > ");
+                    }
                 break;
                 } else{
                 pwd = "Not specified.";
@@ -564,7 +582,7 @@ System.out.println("\nCore Commands:" +
             modWindow(var);
         } else if (command.toLowerCase().contains("set")&&command.toLowerCase().startsWith("se")) {
             String var = trataCampo(command, "set"); // REMOVE A PALAVRA "SET"
-            atualizaValor(var,true);
+            atualizaValor(var,true,modulo);
         } else if (command.toLowerCase().contains("run")) {
             System.out.println("\nStarting module..");
       System.out.println("...");
@@ -572,7 +590,7 @@ System.out.println("\nCore Commands:" +
             System.out.println(""); 
         } else if (command.toLowerCase().contains("unset")&&command.toLowerCase().startsWith("un")) {
                        String var = trataCampo(command, "unset"); // REMOVE A PALAVRA "unset"
-            atualizaValor(var,false); 
+            atualizaValor(var,false,modulo); 
         } else if ((command.toLowerCase().equals("hp")||command.toLowerCase().equals("help"))&&modulo==0) {
             displayMod();
         } else if (command.toLowerCase().contains("hp") || command.toLowerCase().contains("help")) {
@@ -626,23 +644,23 @@ System.out.println("\nCore Commands:" +
                 }
                 break;
             case 5:
-                if (!"Not specified.".equals(usr) && !"Not specified.".equals(pwd) && !"Not specified.".equals(host)) {
+                if (!"Not specified.".equals(usr) && !"Not specified.".equals(spwd) && !"Not specified.".equals(shost)) {
                     smbConnection smb = new smbConnection();
                     startModule("                jcifs","smb                 ");
-                    if (!host.contains("\\\\")) {
-                        host = "\\\\" + host;
+                    if (!shost.contains("\\\\")) {
+                        shost = "\\\\" + shost;
                     }
-                    smb.smb(usr, pwd, host);
+                    smb.smb(usr, spwd, shost);
                 } else {
                     System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                     input(false, false, "[Enter] > ");
                 }
                 break;
             case 6:
-                if (!"Not specified.".equals(host) && !"Not specified.".equals(port) && !"Not specified.".equals(prot) && !"Not specified.".equals(prot) && !"Not specified.".equals(rem) && !"Not specified.".equals(des) && !"Not specified.".equals(pwd)) {
+                if (!"Not specified.".equals(mhost) && !"Not specified.".equals(port) && !"Not specified.".equals(prot) && !"Not specified.".equals(prot) && !"Not specified.".equals(rem) && !"Not specified.".equals(des) && !"Not specified.".equals(mpwd)) {
                     smtpConnection smtp = new smtpConnection();
                     startModule("                 javax","mail               ");
-                    smtp.smtpH(host, port, prot, rem, des, pwd, stls, aut, tmsg, pmsg, qtdm);
+                    smtp.smtpH(mhost, port, prot, rem, des, mpwd, stls, aut, tmsg, pmsg, qtdm);
                     
                 } else {
                     System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
@@ -680,10 +698,10 @@ System.out.println("\nCore Commands:" +
                 }
                 break;
             case 10:
-                if (!"Not specified.".equals(usr) && !"Not specified.".equals(pwd) && !"Not specified.".equals(host) && !"Not specified.".equals(dmn)) {
+                if (!"Not specified.".equals(usr) && !"Not specified.".equals(spwd) && !"Not specified.".equals(shost) && !"Not specified.".equals(dmn)) {
                     smbConnection smb = new smbConnection();
                     startModule("                jcifs","smbRW               ");
-                    smb.smbRW(usr, pwd, host, dmn);
+                    smb.smbRW(usr, spwd, shost, dmn);
                 } else {
                     System.out.println("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                     input(false, false, "[Enter] > ");
@@ -740,20 +758,20 @@ System.out.println("\nCore Commands:" +
             case 5:
                 displayCom(2);
                 displayHpPar();
-                System.out.println("   *Server\\Machine (host):           " + host);
+                System.out.println("   *Server\\Machine (host):           " + shost);
                 System.out.println("   *User (usr):                      " + usr);
-                System.out.println("   *Password (pwd):                  " + pwd+"\n");
+                System.out.println("   *Password (pwd):                  " + spwd+"\n");
                 break;
             case 6:
                 displayCom(2);
                 displayHpPar();
-                System.out.println("   *Server\\Machine (host):           " + host);
+                System.out.println("   *Server\\Machine (host):           " + mhost);
                 System.out.println("   *Port (port):                     " + port);
                 System.out.println("    STARTTLS (stls):                 " + stls);
                 System.out.println("    Authentication (aut):            " + aut);
                 System.out.println("   *Protocol (prot):                 " + prot);
                 System.out.println("   *Sender (rem):                    " + rem);
-                System.out.println("   *Password (pwd):                  " + pwd);
+                System.out.println("   *Password (pwd):                  " + mpwd);
                 System.out.println("    Recipient (des):                 " + des);
                 System.out.println("    Title (tmsg):                    " + tmsg);
                 System.out.println("    Subject (pmsg):                  " + pmsg);
@@ -783,10 +801,10 @@ System.out.println("\nCore Commands:" +
             case 10:
                 displayCom(2);
                 displayHpPar();
-                System.out.println("   *Server\\Machine (host):           " + host);
+                System.out.println("   *Server\\Machine (host):           " + shost);
                 System.out.println("   *User (usr):                      " + usr);
                 System.out.println("   *Domain (dmn):                    " + dmn);
-                System.out.println("   *Password (pwd):                  " + pwd+"\n");
+                System.out.println("   *Password (pwd):                  " + spwd+"\n");
                 break;
             case 11:
                 displayCom(2);
@@ -941,10 +959,6 @@ System.out.println("\nCore Commands:" +
     }
     
         public static void getSysUserHostname() {
-        // Obtendo o nome do usuário
-        
-        // Obtendo o nome da máquina
-
         
         if (sysName.contains("win")) {
             // Para Windows
@@ -977,7 +991,7 @@ System.out.println("\nCore Commands:" +
         Map<String, String> configMap = readConfigFile();
 
         if (configMap != null) {
-            // Exemplo de uso das variáveis configuradas
+
             host = configMap.get("host");
             port = configMap.get("port");
             aut = configMap.get("aut");
@@ -987,10 +1001,16 @@ System.out.println("\nCore Commands:" +
             des = configMap.get("des");
             pwd = configMap.get("pwd");
             url = configMap.get("url");
+            data = configMap.get("data");
             usr = configMap.get("usr");
             tmsg = configMap.get("tmsg");
             pmsg = configMap.get("pmsg");
             qtdm = configMap.get("qtdm");
+            dmn = configMap.get("dmn");
+            mhost = configMap.get("mhost");
+            mpwd = configMap.get("mpwd");
+            shost = configMap.get("shost");
+            spwd = configMap.get("spwd");
 
             for (Map.Entry<String, String> entry : configMap.entrySet()) {
                 System.out.println(entry.getKey() + ": " + entry.getValue());
