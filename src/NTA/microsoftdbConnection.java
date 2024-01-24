@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package NTA;
 
 import java.sql.Connection;
@@ -10,25 +5,47 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
+ * Class for establishing a connection to the Microsoft SQL Server database.
  *
- * @author 320167484
+ * This class provides a method, databaseM, to configure and connect to a
+ * Microsoft SQL Server database.
+ *
+ * Usage: databaseM(url, usr, pwd)
+ *
+ * Parameters: - url: The URL of the SQL Server database. - usr: The username
+ * for authentication. - pwd: The password for authentication.
+ *
+ * Note: - The method establishes a connection to the Microsoft SQL Server
+ * database using the provided credentials. - The connection is closed after
+ * successful establishment.
+ *
+ * @Author: Mauros Milach Junior (github.com/MaurosMJ)
  */
 public class microsoftdbConnection {
-    
-        public void databaseM (String url, String usr, String pwd){
 
+    /**
+     * Establishes a connection to the Microsoft SQL Server database.
+     *
+     * @param url The URL of the SQL Server database.
+     * @param usr The username for authentication.
+     * @param pwd The password for authentication.
+     */
+    public void databaseM(String url, String usr, String pwd) {
         try {
-            // Carrega explicitamente o driver JDBC do SQL Server
+            // Load the Microsoft SQL Server JDBC driver
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-            // Estabelece a conexão com o banco de dados
-            Connection conexao = DriverManager.getConnection(url, usr, pwd);
+            // Establish a connection to the database
+            Connection connection = DriverManager.getConnection(url, usr, pwd);
             System.out.println("Database connection established successfully!");
-            conexao.close();
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("Unable to connect to the database.");
-            e.printStackTrace();
+            handleDatabaseConnectionError(e);
         }
-            
-        }
+    }
+
+    private void handleDatabaseConnectionError(Exception e) {
+        // Log an error message and print the stack trace
+        System.out.println("Unable to connect to the database.");
+        e.printStackTrace();
+    }
 }

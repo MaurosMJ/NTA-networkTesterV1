@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package NTA;
 
 import java.io.BufferedReader;
@@ -14,51 +9,72 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * Class for establishing an HTTP POST connection and sending data.
  *
- * @author 320167484
+ * This class provides a method, hConnect, to configure and send an HTTP POST
+ * request.
+ *
+ * Usage: hConnect(url, urlParameters)
+ *
+ * Parameters: - url: The URL to which the POST request is sent. -
+ * urlParameters: The parameters to include in the POST request.
+ *
+ * Note: - The method sends an HTTP POST request to the specified URL with the
+ * provided parameters. - It prints the response received from the server.
+ *
+ * @Author: Mauros Milach Junior (github.com/MaurosMJ)
  */
 public class httpPostConnection {
-    
-    public void hConnect (String url , String urlParameters ) throws MalformedURLException, IOException {
-        // URL e parâmetros
-       try {
-        // Criação da conexão
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-        // Configuração do método POST
-        con.setRequestMethod("POST");
+    /**
+     * Sends an HTTP POST request to the specified URL with the provided
+     * parameters.
+     *
+     * @param url The URL to which the POST request is sent.
+     * @param urlParameters The parameters to include in the POST request.
+     * @throws MalformedURLException If the URL is malformed.
+     * @throws IOException If an IO error occurs during the connection.
+     */
+    public void hConnect(String url, String urlParameters) throws MalformedURLException, IOException {
+        try {
+            // Create URL object
+            URL obj = new URL(url);
 
-        // Adiciona cabeçalhos necessários
-        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            // Open a connection
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-        // Habilita output (envio de dados)
-        con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(urlParameters);
-        wr.flush();
-        wr.close();
+            // Set the request method to POST
+            con.setRequestMethod("POST");
 
-        // Leitura da resposta
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
+            // Set the content type to form-urlencoded
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
+            // Enable input and output streams
+            con.setDoOutput(true);
 
-        // Exibe a resposta
-        System.out.println("Request response:");
-        System.out.println(response.toString());
-                } catch (MalformedURLException e) {
-            System.err.println("URL mal formado: " + e.getMessage());
-            // Você pode lidar com isso de outras maneiras, como logar o erro ou notificar o usuário.
+            // Write the parameters to the output stream
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(urlParameters);
+            wr.flush();
+            wr.close();
+
+            // Read the response from the server
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // Print the response
+            System.out.println("Request response:");
+            System.out.println(response.toString());
+        } catch (MalformedURLException e) {
+            System.err.println("Malformed URL: " + e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Erro de IO: " + e.getMessage());
-            // Trate outras exceções de IO aqui, se necessário.
+            System.err.println("IO Error: " + e.getMessage());
         }
     }
 }
