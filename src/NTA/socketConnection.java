@@ -2,6 +2,7 @@ package NTA;
 
 import java.io.IOException;
 import java.net.Socket;
+import org.fusesource.jansi.AnsiConsole;
 
 /**
  * Class for establishing a socket connection.
@@ -22,19 +23,25 @@ import java.net.Socket;
  */
 public class socketConnection {
 
+    private final String resetColor = "\u001B[0m";
+    private final String redColor = "\u001B[91m";
+    private final String greenColor = "\u001B[32m";
+
     public void socketM(String host, int porta) {
         if (host == null || host.isEmpty() || porta <= 0) {
-            System.out.println("Argumentos inválidos para estabelecer a conexão.");
+            System.out.println(redColor+"Argumentos inválidos para estabelecer a conexão.");
             return;
         }
         try {
             try (Socket socket = new Socket(host, porta)) {
-                System.out.println("Successful connection with " + host + ":" + porta);
+                System.out.println(greenColor+"Successful connection with " + host + ":" + porta);
                 socket.close();
             }
         } catch (IOException e) {
-            System.out.println("Unable to connect to " + host + ":" + porta);
+            System.out.println(redColor+"Unable to connect to " + host + ":" + porta);
+            System.out.print(redColor);
             e.printStackTrace();
+            System.out.print(resetColor);
         }
     }
 }

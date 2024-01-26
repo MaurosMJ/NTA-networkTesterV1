@@ -3,6 +3,7 @@ package NTA;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.fusesource.jansi.AnsiConsole;
 
 /**
  * Class for establishing a connection to the Microsoft SQL Server database.
@@ -23,6 +24,10 @@ import java.sql.SQLException;
  */
 public class microsoftdbConnection {
 
+    private final String resetColor = "\u001B[0m";
+    private final String redColor = "\u001B[91m";
+    private final String greenColor = "\u001B[32m";
+
     /**
      * Establishes a connection to the Microsoft SQL Server database.
      *
@@ -37,15 +42,19 @@ public class microsoftdbConnection {
 
             // Establish a connection to the database
             Connection connection = DriverManager.getConnection(url, usr, pwd);
-            System.out.println("Database connection established successfully!");
+            System.out.println(greenColor+"Database connection established successfully!"+resetColor);
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.print(redColor);
             handleDatabaseConnectionError(e);
+            System.out.print(resetColor);
         }
     }
 
     private void handleDatabaseConnectionError(Exception e) {
         // Log an error message and print the stack trace
-        System.out.println("Unable to connect to the database.");
+        System.out.println(redColor+"Unable to connect to the database."+resetColor);
+        System.out.print(redColor);
         e.printStackTrace();
+        System.out.print(resetColor);
     }
 }

@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.fusesource.jansi.AnsiConsole;
 
 /**
  * Class for establishing an HTTP POST connection and sending data.
@@ -25,6 +26,9 @@ import java.net.URL;
  * @Author: Mauros Milach Junior (github.com/MaurosMJ)
  */
 public class httpPostConnection {
+
+    private final String resetColor = "\u001B[0m";
+    private final String redColor = "\u001B[91m";
 
     /**
      * Sends an HTTP POST request to the specified URL with the provided
@@ -71,10 +75,12 @@ public class httpPostConnection {
             System.out.println("Request response:");
             System.out.println(response.toString());
         } catch (MalformedURLException e) {
-            System.err.println("Malformed URL: " + e.getMessage());
+            System.err.println(redColor+"Malformed URL: " + e.getMessage()+resetColor);
         } catch (IOException e) {
+            System.out.print(redColor);
             e.printStackTrace();
-            System.err.println("IO Error: " + e.getMessage());
+            System.out.print(resetColor);
+            System.err.println(redColor+"IO Error: " + e.getMessage()+resetColor);
         }
     }
 }

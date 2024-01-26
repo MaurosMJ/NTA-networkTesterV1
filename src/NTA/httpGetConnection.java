@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import org.fusesource.jansi.AnsiConsole;
 
 /**
  * Class for establishing an HTTP GET connection and receiving data.
@@ -28,6 +29,10 @@ public class httpGetConnection {
      *
      * @param url The URL from which the GET request is sent.
      */
+    private final String resetColor = "\u001B[0m";
+    private final String redColor = "\u001B[91m";
+    private final String greenColor = "\u001B[32m";
+    
     public void hConnect(String url) {
         try {
             // Open a connection
@@ -52,12 +57,14 @@ public class httpGetConnection {
             // Print the response code and response
             System.out.println("Response code: " + responseCode);
             System.out.println("Response:");
-            System.out.println(response.toString());
+            System.out.println(redColor+response.toString()+resetColor);
 
             // Disconnect the connection
             connection.disconnect();
         } catch (IOException e) {
+            System.out.print(redColor);
             e.printStackTrace();
+            System.out.print(resetColor);
         }
     }
 }

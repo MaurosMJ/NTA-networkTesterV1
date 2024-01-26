@@ -3,6 +3,7 @@ package NTA;
 import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
+import org.fusesource.jansi.AnsiConsole;
 
 /**
  * Class for establishing an SMTP connection and sending emails.
@@ -25,6 +26,10 @@ import javax.mail.internet.*;
  */
 public class smtpConnection {
 
+    private final String resetColor = "\u001B[0m";
+    private final String redColor = "\u001B[91m";
+    private final String greenColor = "\u001B[32m";
+
     public void smtpH(String host, String port, String prot, String rem, String des, String pwd, String stls, String aut, String tmsg, String pmsg, String qtdm) {
 
         int a;
@@ -46,9 +51,11 @@ public class smtpConnection {
         try {
             Message mensagem = createEmailMessage(session, rem, des, tmsg, pmsg);
             sendEmail(a, mensagem);
-            System.out.println("Email sent successfully!");
+            System.out.println(greenColor+"Email sent successfully!"+resetColor);
         } catch (MessagingException e) {
-            System.out.println("Error sending the email: " + e.getMessage());
+            System.out.print(redColor);
+            System.out.println(redColor+"Error sending the email: " + e.getMessage()+resetColor);
+            System.out.print(resetColor);
         }
     }
 
