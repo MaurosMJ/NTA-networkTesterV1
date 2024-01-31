@@ -28,6 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 import org.w3c.dom.NodeList;
 import org.fusesource.jansi.AnsiConsole;
 
@@ -80,6 +81,7 @@ public class Main {
         // Retrieve system user hostname information
         retrieveSysUserHostname();
         displayLogo();
+        
         // Display the main modules screen and handle user input
         showModulesScreen();
     }
@@ -111,15 +113,16 @@ public class Main {
      */
     private static void processCommand(String input) throws IOException {
         switch (input.toLowerCase()) {
-            case "*":
+
+            case "1":
                 // Display all JVM information
                 displayAllJVMInfo();
                 handleConfirmOrInvalidInput("");
                 break;
 
-            case "opts":
-                // Display JVM options information
-                displayJvmOptInfo();
+            case "*":
+                // Display all JVM information
+                displayAllJVMInfo();
                 handleConfirmOrInvalidInput("");
                 break;
 
@@ -177,6 +180,11 @@ public class Main {
                 handleConfirmOrInvalidInput("");
                 break;
 
+            case "2":
+                // Perform an HTTP POST request
+                httpPost();
+                break;
+
             case "hpost":
                 // Perform an HTTP POST request
                 httpPost();
@@ -187,9 +195,19 @@ public class Main {
                 httpGET();
                 break;
 
+            case "3":
+                // Establish bidirectional TCP communication channel
+                socket();
+                break;
+
             case "socket":
                 // Establish bidirectional TCP communication channel
                 socket();
+                break;
+
+            case "4":
+                // Establish SMB connection with a file server
+                smbProtocol();
                 break;
 
             case "smb":
@@ -197,9 +215,19 @@ public class Main {
                 smbProtocol();
                 break;
 
+            case "6":
+                // Establish connection with SMTP server and send email
+                smtpMail();
+                break;
+
             case "mail":
                 // Establish connection with SMTP server and send email
                 smtpMail();
+                break;
+
+            case "9":
+                // Establish connection with Oracle database
+                databaseORA();
                 break;
 
             case "oracle":
@@ -207,9 +235,19 @@ public class Main {
                 databaseORA();
                 break;
 
+            case "7":
+                // Establish connection with Microsoft SQL Server database
+                databaseMS();
+                break;
+
             case "mserver":
                 // Establish connection with Microsoft SQL Server database
                 databaseMS();
+                break;
+
+            case "8":
+                // Establish connection with MySQL database
+                databaseMY();
                 break;
 
             case "mysql":
@@ -222,9 +260,20 @@ public class Main {
                 readTextFile();
                 break;
 
+            case "5":
+                // Establish SMB connection, send and read text file
+                smbRW();
+                break;
+
             case "smbrw":
                 // Establish SMB connection, send and read text file
                 smbRW();
+                break;
+
+            case "10":
+                // Find and load the first .XML file in the directory
+                xml();
+                handleConfirmOrInvalidInput("");
                 break;
 
             case "xml":
@@ -255,7 +304,7 @@ public class Main {
         // ANSI escape code for resetting text color to default
         System.out.println(
                 "\n  [NTA] - NetworkAnalyzer\n"
-                + yellowColor+"  @Author: Mauros Milach"+resetColor);
+                + yellowColor + "  @Author: Mauros Milach" + resetColor);
         System.out.println("  v1.0" + resetColor);
     }
 
@@ -267,28 +316,28 @@ public class Main {
         displayCommands(1);
         // Display module information
         System.out.println("\n" + greenColor + "Core Framework\\Modules:" + resetColor
-                + "\n=======================\n"
-                + "\n   Module                                                                Description"
-                + "\n   ------                                                                -----------\n\n"
-                + "   \\Jvm_info\\java.lang.management\\" + greenColor + "CompilationMXBean" + resetColor + "                      Displays information about the " + greenColor + "compilation process" + resetColor + " in a Java Virtual Machine (JVM).\n"
-                + "   \\Jvm_info\\java.lang.management\\" + greenColor + "GarbageCollectorMXBean" + resetColor + "                 Displays information about insights and control over the " + greenColor + "garbage collection" + resetColor + "process in a Java Virtual Machine (JVM).\n"
-                + "   \\Jvm_info\\java.lang.management\\" + greenColor + "ManagementFactory" + resetColor + "                      Displays information about convenient methods for accessing various " + greenColor + "management beans" + resetColor + " in the Java Virtual Machine (JVM).\n"
-                + "   \\Jvm_info\\java.lang.management\\" + greenColor + "MemoryMXBean" + resetColor + "                           Displays information about insights into the " + greenColor + "memory usage" + resetColor + ", memory pools, and garbage collection statistics.\n"
-                + "   \\Jvm_info\\java.lang.management\\" + greenColor + "OperatingSystemMXBean" + resetColor + "                  Displays information about the underlying " + greenColor + "operating system's" + resetColor + " monitoring and management information.\n"
-                + "   \\Jvm_info\\java.lang.management\\" + greenColor + "ThreadMXBean" + resetColor + "                           Displays information about " + greenColor + "thread activity" + resetColor + ", including monitoring and managing threads.\n"
-                + "   \\Jvm_info\\java.time.LocalDateTime\\" + greenColor + "time" + resetColor + "                                Displays information about the " + greenColor + "local machine's time" + resetColor + " and the time obtained from the JVM for comparison purposes.\n"
-                + "   \\Jvm_info\\java.lang.management\\runtimeMXBean\\" + greenColor + "opts" + resetColor + "                     Displays information about all " + greenColor + "JVM parameters/arguments" + resetColor + " defined globally in the operating system.\n"
-                + "   \\Jvm_info\\System\\" + greenColor + "java_home" + resetColor + "                                            Displays information about " + greenColor + "Java installation" + resetColor + " path.\n"
-                + "   \\Jvm_info\\System\\" + greenColor + "*" + resetColor + "                                                    Displays " + greenColor + "all" + resetColor + " available information related to the JVM.\n"
-                + "   \\database\\mysql.cj.jdbc.Driver\\" + greenColor + "mysql" + resetColor + "                                  Establishes a connection with a " + greenColor + "MYSQL database" + resetColor + " using the proprietary driver.\n"
-                + "   \\database\\jdbc.driver.OracleDriver\\" + greenColor + "oracle" + resetColor + "                             Establishes a connection with an " + greenColor + "ORACLE database" + resetColor + " using the proprietary driver.\n"
-                + "   \\database\\microsoft.sqlserver.jdbc.SQLServerDriver\\" + greenColor + "mserver" + resetColor + "            Establishes a connection with a " + greenColor + "MICROSOFT SQL SERVER database" + resetColor + " using the proprietary driver.\n"
-                + "   \\smb_connection\\jcifs\\" + greenColor + "smb" + resetColor + "                                             Establishes an " + greenColor + "SMB" + resetColor + " (Server Message Block) connection with a file server (Storage NAS) and lists all files in the primary directory via JVM.\n"
-                + "   \\smb_connection\\jcifs\\" + greenColor + "smbRW" + resetColor + "                                           Establishes an " + greenColor + "SMB" + resetColor + " (Server Message Block) connection with a file server (NAS Storage), sends a text file to a directory, reads the text file on the server, and returns this information to the client for validation of write and read permissions in the directory.\n"
-                + "   \\smtp_protocol_connection\\javax.mail\\" + greenColor + "mail" + resetColor + "                             Establishes a connection with an " + greenColor + "SMTP" + resetColor + " (Simple Mail Transfer Protocol) server and sends an email using the provided context-specific variables via JVM.\n"
-                + "   \\socket_Connection\\java.net\\" + greenColor + "socket" + resetColor + "                                     Establishes a " + greenColor + "bidirectional TCP" + resetColor + " communication channel between a client and a server via JVM.\n"
-                + "   \\httpPost_Request\\java.net\\" + greenColor + "hpost" + resetColor + "                                      Performs an " + greenColor + "HTTP POST request" + resetColor + " between a client and a web server via JVM.\n"
-                + "   \\xml\\" + greenColor + "xml" + resetColor + "                                                              Find the first " + greenColor + ".XML file" + resetColor + " in the directory \"\\NTA\\class\\xml\", all variables will be loaded with user-configured parameters.\n"
+                + "\n=======================\n\n"
+                + "   Shortcut"+"   Module                                                                Description"
+                + "\n   --------   ------                                                                -----------\n\n"
+                + "   |      |"+"   \\Jvm_info\\java.lang.management\\" + greenColor + "CompilationMXBean" + resetColor + "                      Displays information about the " + greenColor + "compilation process" + resetColor + " in a Java Virtual Machine (JVM).\n"
+                + "   |      |"+"   \\Jvm_info\\java.lang.management\\" + greenColor + "GarbageCollectorMXBean" + resetColor + "                 Displays information about insights and control over the " + greenColor + "garbage collection" + resetColor + "process in a Java Virtual Machine (JVM).\n"
+                + "   |      |"+"   \\Jvm_info\\java.lang.management\\" + greenColor + "ManagementFactory" + resetColor + "                      Displays information about convenient methods for accessing various " + greenColor + "management beans" + resetColor + " in the Java Virtual Machine (JVM).\n"
+                + "   |      |"+"   \\Jvm_info\\java.lang.management\\" + greenColor + "MemoryMXBean" + resetColor + "                           Displays information about insights into the " + greenColor + "memory usage" + resetColor + ", memory pools, and garbage collection statistics.\n"
+                + "   |      |"+"   \\Jvm_info\\java.lang.management\\" + greenColor + "OperatingSystemMXBean" + resetColor + "                  Displays information about the underlying " + greenColor + "operating system's" + resetColor + " monitoring and management information.\n"
+                + "   |      |"+"   \\Jvm_info\\java.lang.management\\" + greenColor + "ThreadMXBean" + resetColor + "                           Displays information about " + greenColor + "thread activity" + resetColor + ", including monitoring and managing threads.\n"
+                + "   |      |"+"   \\Jvm_info\\java.time.LocalDateTime\\" + greenColor + "time" + resetColor + "                                Displays information about the " + greenColor + "local machine's time" + resetColor + " and the time obtained from the JVM for comparison purposes.\n"
+                + "   |      |"+"   \\Jvm_info\\java.lang.management\\runtimeMXBean\\" + greenColor + "opts" + resetColor + "                     Displays information about all " + greenColor + "JVM parameters/arguments" + resetColor + " defined globally in the operating system.\n"
+                + "   |      |"+"   \\Jvm_info\\System\\" + greenColor + "java_home" + resetColor + "                                            Displays information about " + greenColor + "Java installation" + resetColor + " path.\n"
+                + "   |   "+greenColor+"1"+resetColor+"  |"+"   \\Jvm_info\\System\\" + greenColor + "*" + resetColor + "                                                    Displays " + greenColor + "all" + resetColor + " available information related to the JVM.\n"
+                + "   |   "+greenColor+"2"+resetColor+"  |"+"   \\httpPost_Request\\java.net\\" + greenColor + "hpost" + resetColor + "                                      Performs an " + greenColor + "HTTP POST request" + resetColor + " between a client and a web server via JVM.\n"
+                + "   |   "+greenColor+"3"+resetColor+"  |"+"   \\socket_Connection\\java.net\\" + greenColor + "socket" + resetColor + "                                    Establishes a " + greenColor + "bidirectional TCP" + resetColor + " communication channel between a client and a server via JVM.\n"
+                + "   |   "+greenColor+"4"+resetColor+"  |"+"   \\smb_connection\\jcifs\\" + greenColor + "smb" + resetColor + "                                             Establishes an " + greenColor + "SMB" + resetColor + " (Server Message Block) connection with a file server (Storage NAS) and lists all files in the primary directory via JVM.\n"
+                + "   |   "+greenColor+"5"+resetColor+"  |"+"   \\smb_connection\\jcifs\\" + greenColor + "smbRW" + resetColor + "                                           Establishes an " + greenColor + "SMB" + resetColor + " (Server Message Block) connection, sends a text file to a directory, for validation of write and read permissions in the directory.\n"
+                + "   |   "+greenColor+"6"+resetColor+"  |"+"   \\smtp_protocol_connection\\javax.mail\\" + greenColor + "mail" + resetColor + "                             Establishes a connection with an " + greenColor + "SMTP" + resetColor + " (Simple Mail Transfer Protocol) server and sends an email using the provided context-specific variables via JVM.\n"
+                + "   |   "+greenColor+"7"+resetColor+"  |"+"   \\database\\microsoft.sqlserver.jdbc.SQLServerDriver\\" + greenColor + "mserver" + resetColor + "            Establishes a connection with a " + greenColor + "MICROSOFT SQL SERVER database" + resetColor + " using the proprietary driver.\n"
+                + "   |   "+greenColor+"8"+resetColor+"  |"+"   \\database\\mysql.cj.jdbc.Driver\\" + greenColor + "mysql" + resetColor + "                                  Establishes a connection with a " + greenColor + "MYSQL database" + resetColor + " using the proprietary driver.\n"
+                + "   |   "+greenColor+"9"+resetColor+"  |"+"   \\database\\jdbc.driver.OracleDriver\\" + greenColor + "oracle" + resetColor + "                             Establishes a connection with an " + greenColor + "ORACLE database" + resetColor + " using the proprietary driver.\n"
+                + "   |  "+greenColor+"10"+resetColor+"  |"+"   \\xml\\" + greenColor + "xml" + resetColor + "                                                              Find the first " + greenColor + ".XML file" + resetColor + " in the directory \"\\NTA\\class\\xml\", all variables will be loaded with user-configured parameters.\n"
         );
     }
 
@@ -319,7 +368,9 @@ public class Main {
                     + "   'help' or 'hp'            Display information about modules and retrieve the value of context-specific variables.\n"
                     + redColor + "   'load'                    Load a context-specific framework module.\n" + resetColor
                     + "   'exit' or 'x'             Move back from the current context.\n"
-                    + "   'exit-now' or 'xn'        Exit the console."
+                    + "   'exit-now' or 'xn'        Exit the console.\n\n"
+                    + yellowColor + "   Tip: To initiate a module, use the '"+redColor+"load"+yellowColor+"' command, for example: '"+redColor+"load socket"+yellowColor+"', or the equivalent shortcut '"+redColor+"3"+yellowColor+"'.\n"
+                    +"   Tip: For comprehensive documentation, please refer to our Technology Team (Support) Sharepoint at "+greenColor+"SupportTechnology"+yellowColor+" ("+redColor+"https://bit.ly/3HFvAym"+yellowColor+")."
             );
         }
 
@@ -333,7 +384,10 @@ public class Main {
                     + redColor + "   'run'                     Run a framework module.\n" + resetColor
                     + "   'unset'                   Unset one context-specific variable.\n"
                     + "   'exit' or 'x'             Move back from the current context.\n"
-                    + "   'exit-now' or 'xn'        Exit the console.\n"
+                    + "   'exit-now' or 'xn'        Exit the console.\n\n"
+                    + yellowColor + "   Tip: When assigning a value to a variable, use the '"+redColor+"set"+yellowColor+"' command, such as '"+redColor+"set host"+yellowColor+"', and then enter the corresponding value.\n"
+                    +"   Tip: To run the module, use the '"+redColor+"run"+yellowColor+"' command, for example, '"+redColor+"run"+yellowColor+"'. The module will be loaded with all the configurations set in the parameters.\n"
+                    +"   Tip: For comprehensive documentation, please refer to our Technology Team (Support) Sharepoint at "+greenColor+"SupportTechnology"+yellowColor+" ("+redColor+"https://bit.ly/3HFvAym"+yellowColor+")."
             );
         }
     }
@@ -398,7 +452,7 @@ public class Main {
                 + "|____/|_|  |_| |_| |_|    \n"
                 + "-----------------------------\n"
                 + "Simple Mail Transfer Protocol\n"
-                + "Module Author: "+yellowColor+"@MaurosMJ" + resetColor + "\n");
+                + "Module Author: " + yellowColor + "@MaurosMJ" + resetColor + "\n");
 
         String input;
         do {
@@ -421,7 +475,7 @@ public class Main {
                 + "|_| |_| |_|   |_| |_|     |_|   \\___/|___/\\__|\n"
                 + "----------------------------------------------\n"
                 + "Hypertext Transfer Protocol (POST)\n"
-                + "Module Author: "+yellowColor+"@MaurosMJ" + resetColor + "\n");
+                + "Module Author: " + yellowColor + "@MaurosMJ" + resetColor + "\n");
 
         String input;
         do {
@@ -461,7 +515,7 @@ public class Main {
                 + "|____/ \\___/ \\____|_|\\_\\_____| |_|  \n"
                 + "------------------------------------\n"
                 + "Socket Connection\n"
-                + "Module Author: "+yellowColor+"@MaurosMJ" + resetColor + "\n");
+                + "Module Author: " + yellowColor + "@MaurosMJ" + resetColor + "\n");
 
         String input;
         do {
@@ -485,7 +539,7 @@ public class Main {
                 + "|____/|_|  |_|____/ \n"
                 + "--------------------\n"
                 + "Server Message Block\n"
-                + "Module Author: "+yellowColor+"@MaurosMJ" + resetColor + "\n");
+                + "Module Author: " + yellowColor + "@MaurosMJ" + resetColor + "\n");
 
         String input;
         do {
@@ -509,7 +563,7 @@ public class Main {
                 + " \\___/|_| \\_\\/_/   \\_\\____|_____|_____|\n"
                 + "---------------------------------------\n"
                 + "Oracle Net Protocol\n"
-                + "Module Author: "+yellowColor+"@MaurosMJ" + resetColor + "\n");
+                + "Module Author: " + yellowColor + "@MaurosMJ" + resetColor + "\n");
 
         String input;
         do {
@@ -533,7 +587,7 @@ public class Main {
                 + "|_|  |_|____/     |____/ \\__\\_\\_____|\n"
                 + "-------------------------------------\n"
                 + "Tabular Data Stream\n"
-                + "Module Author: "+yellowColor+"@MaurosMJ" + resetColor + "\n");
+                + "Module Author: " + yellowColor + "@MaurosMJ" + resetColor + "\n");
 
         String input;
         do {
@@ -560,7 +614,7 @@ public class Main {
                 + "|____/|_|  |_|____/ \n"
                 + "--------------------\n"
                 + "Server Message Block\n"
-                + "Module Author: "+yellowColor+"@MaurosMJ" + resetColor + "\n");
+                + "Module Author: " + yellowColor + "@MaurosMJ" + resetColor + "\n");
 
         String input;
         do {
@@ -584,7 +638,7 @@ public class Main {
                 + "|_|  |_| |_| |____/ \\__\\_\\_____|\n"
                 + "--------------------------------\n"
                 + "MySQL Protocol (TCP\\IP)\n"
-                + "Module Author: "+yellowColor+"@MaurosMJ" + resetColor + "\n");
+                + "Module Author: " + yellowColor + "@MaurosMJ" + resetColor + "\n");
 
         String input;
         do {
@@ -854,8 +908,8 @@ public class Main {
      * @param message The message to display for the invalid input.
      */
     private static void handleConfirmOrInvalidInput(String message) {
-        System.out.println(redColor + message + resetColor +">Press [Enter] to continue:");
-        input(false, false, yellowColor+"[Enter]"+resetColor+" > ");
+        System.out.println(redColor + message + resetColor + ">Press [Enter] to continue:");
+        input(false, false, yellowColor + "[Enter]" + resetColor + " > ");
     }
 
     /**
@@ -905,9 +959,11 @@ public class Main {
         } else if (lowerCommand.equals("exit") || lowerCommand.equals("x")) {
             // Return to the modules screen for 'exit' or 'x' command in other modules
             showModulesScreen();
+        } else if (Pattern.matches("\\d+", lowerCommand)) {
+            processCommand(lowerCommand);
         } else {
             // Handle invalid command and prompt user to continue
-            handleConfirmOrInvalidInput("Invalid command. Press [Enter] to continue:");
+            handleConfirmOrInvalidInput("Invalid command.");
         }
     }
 
@@ -1111,9 +1167,9 @@ public class Main {
      */
     private static void displayClassLoadingInfo() throws IOException {
         ClassLoadingMXBean classLoadingMXBean = ManagementFactory.getClassLoadingMXBean();
-        System.out.println(yellowColor+"Class Loading:"+resetColor);
-        System.out.println("  Total loaded classes: " + classLoadingMXBean.getTotalLoadedClassCount());
-        System.out.println("  Total unloaded classes: " + classLoadingMXBean.getUnloadedClassCount());
+        System.out.println(yellowColor + "Class Loading:" + resetColor);
+        System.out.println(greenColor+"  Total loaded classes: " + classLoadingMXBean.getTotalLoadedClassCount());
+        System.out.println(greenColor+"  Total unloaded classes: " + classLoadingMXBean.getUnloadedClassCount());
     }
 
     /**
@@ -1123,10 +1179,10 @@ public class Main {
      */
     private static void displayGarbageCollectorInfo() throws IOException {
         GarbageCollectorMXBean garbageCollectorMXBean = ManagementFactory.getGarbageCollectorMXBeans().get(0);
-        System.out.println(yellowColor+"Garbage Collection:"+resetColor);
-        System.out.println("  Collector name: " + garbageCollectorMXBean.getName());
-        System.out.println("  Number of collections: " + garbageCollectorMXBean.getCollectionCount());
-        System.out.println("  Collection time (ms): " + garbageCollectorMXBean.getCollectionTime());
+        System.out.println(yellowColor + "Garbage Collection:" + resetColor);
+        System.out.println(greenColor+"  Collector name: " + garbageCollectorMXBean.getName());
+        System.out.println(greenColor+"  Number of collections: " + garbageCollectorMXBean.getCollectionCount());
+        System.out.println(greenColor+"  Collection time (ms): " + garbageCollectorMXBean.getCollectionTime());
     }
 
     /**
@@ -1136,8 +1192,8 @@ public class Main {
      */
     private static void displayCompilationInfo() throws IOException {
         CompilationMXBean compilationMXBean = ManagementFactory.getCompilationMXBean();
-        System.out.println(yellowColor+"Compilation:"+resetColor);
-        System.out.println("  Compiler name: " + compilationMXBean.getName());
+        System.out.println(yellowColor + "Compilation:" + resetColor);
+        System.out.println(greenColor+"  Compiler name: " + compilationMXBean.getName());
     }
 
     /**
@@ -1147,9 +1203,9 @@ public class Main {
      */
     private static void displayThreadInfo() throws IOException {
         ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        System.out.println(yellowColor+"Threads:"+resetColor);
-        System.out.println("  Number of active threads: " + threadMXBean.getThreadCount());
-        System.out.println("  Peak threads: " + threadMXBean.getPeakThreadCount());
+        System.out.println(yellowColor + "Threads:" + resetColor);
+        System.out.println(greenColor+"  Number of active threads: " + threadMXBean.getThreadCount());
+        System.out.println(greenColor+"  Peak threads: " + threadMXBean.getPeakThreadCount());
     }
 
     /**
@@ -1159,8 +1215,8 @@ public class Main {
      */
     private static void displayAvailableProcessorsInfo() throws IOException {
         Runtime runtime = Runtime.getRuntime();
-        System.out.println(yellowColor+"Runtime:"+resetColor);
-        System.out.println("  Available processors: " + runtime.availableProcessors());
+        System.out.println(yellowColor + "Runtime:" + resetColor);
+        System.out.println(greenColor+"  Available processors: " + runtime.availableProcessors());
     }
 
     /**
@@ -1170,9 +1226,9 @@ public class Main {
      */
     private static void displayOperatingSystemInfo() throws IOException {
         OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
-        System.out.println(yellowColor+"Operating System:"+resetColor);
-        System.out.println("  OS name: " + operatingSystemMXBean.getName());
-        System.out.println("  OS version: " + operatingSystemMXBean.getVersion());
+        System.out.println(yellowColor + "Operating System:" + resetColor);
+        System.out.println(greenColor+"  OS name: " + operatingSystemMXBean.getName());
+        System.out.println(greenColor+"  OS version: " + operatingSystemMXBean.getVersion());
     }
 
     /**
@@ -1180,8 +1236,8 @@ public class Main {
      */
     private static void displayMemoryInfo() {
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
-        System.out.println(yellowColor+"JVM Memory:"+resetColor);
-        System.out.println("  Heap Memory Usage: " + memoryMXBean.getHeapMemoryUsage());
+        System.out.println(yellowColor + "JVM Memory:" + resetColor);
+        System.out.println(greenColor+"  Heap Memory Usage: " + memoryMXBean.getHeapMemoryUsage());
     }
 
     /**
@@ -1191,7 +1247,7 @@ public class Main {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         String formattedDateTime = now.format(formatter);
-        System.out.println("Local date and time (JVM): " + formattedDateTime);
+        System.out.println(yellowColor +"Local date and time (JVM): "+resetColor + formattedDateTime);
         displayTime();
     }
 
@@ -1201,7 +1257,7 @@ public class Main {
      * @throws IOException If an I/O error occurs.
      */
     private static void displayAllJVMInfo() throws IOException {
-        System.out.println(redColor+"JVM Information:"+resetColor);
+        System.out.println(redColor + "JVM Information:" + resetColor);
         displayClassLoadingInfo();
         displayGarbageCollectorInfo();
         displayCompilationInfo();
@@ -1218,21 +1274,20 @@ public class Main {
      * Displays information about the Java home directory in the JVM.
      */
     private static void displayJavaHomeInfo() {
-        System.out.println("Java Home Directory: " + System.getProperty("java.home"));
+        System.out.println(yellowColor +"Java Home Directory: "+ resetColor + System.getProperty("java.home"));
     }
 
     /**
      * Displays information about JVM options.
      */
     private static void displayJvmOptInfo() {
-        System.out.println("JVM Options: " + ManagementFactory.getRuntimeMXBean().getInputArguments());
+        System.out.println(yellowColor +"JVM Options: "+resetColor + ManagementFactory.getRuntimeMXBean().getInputArguments());
     }
 
     /**
      * Displays the current time.
      */
     private static void displayTime() {
-        System.out.print("Current Time: ");
         displayCurrentDateTime();
     }
 
@@ -1267,7 +1322,7 @@ public class Main {
             BufferedReader timeReader = new BufferedReader(new InputStreamReader(processTime.getInputStream()));
             String time = timeReader.readLine();
 
-            System.out.println("Local date and time (Windows): " + date + " " + time);
+            System.out.println(yellowColor+"Local date and time (Windows): "+resetColor + date + " " + time);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1284,7 +1339,7 @@ public class Main {
 
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String dateTime = reader.readLine();
-                System.out.println("Local date and time (Linux): " + dateTime);
+                System.out.println(yellowColor+"\nLocal date and time (Linux): "+resetColor + dateTime);
             }
 
             int exitCode = process.waitFor();
