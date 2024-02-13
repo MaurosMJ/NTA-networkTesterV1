@@ -33,7 +33,7 @@ Há dois scripts disponíveis: um denominado 'start.bat' projetado para ser util
 
 ## Comandos
 O processo envolve duas telas fundamentais: a primeira destinada à seleção dos módulos e a segunda voltada para a parametrização desses módulos.
-![Descrição da imagem](https://imgur.com/SXpZlP2)
+![Descrição da imagem](https://imgur.com/SXpZlP2.png)
 
 | Comando | Descrição |
 | ------ | ------ |
@@ -41,7 +41,7 @@ O processo envolve duas telas fundamentais: a primeira destinada à seleção do
 | 'load' | Carrega uma biblioteca de módulo. |
 | 'exit' ou 'x' | Encerra o console. |
 
-![Descrição da imagem](https://imgur.com/xchptYP)
+![Descrição da imagem](https://imgur.com/xchptYP.png)
 
 
 | Comando | Descrição |
@@ -62,7 +62,7 @@ Para atribuir um valor a uma variável, utilize o comando a seguir:
 Caso deseje limpar o valor de uma variável, utilize o comando:
 > unset <variável>
 
-![Descrição da imagem](https://imgur.com/4q3Xez3)
+![Descrição da imagem](https://imgur.com/4q3Xez3.png)
 
 ## Lista de variáveis globais:
 
@@ -87,18 +87,18 @@ Caso deseje limpar o valor de uma variável, utilize o comando:
 ## Parâmetros obrigatórios (*):
 Todos os parâmetros marcados com (*) são obrigatórios. Caso não sejam informados, a execução do módulo por meio do comando 'run' não será possível.
 
-![Descrição da imagem](https://imgur.com/f9UbGjR)
+![Descrição da imagem](https://imgur.com/f9UbGjR.png)
 
 ## Módulos:
 Para visualizar todos os módulos disponíveis, você pode utilizar o comando 'hp' ou 'help'. Os módulos são categorizados por bibliotecas, seguidos pelo nome do respectivo módulo.
 
-![Descrição da imagem](https://imgur.com/Se4Ttfx)
+![Descrição da imagem](https://imgur.com/Se4Ttfx.png)
 
 ## Carregar um módulo:
 Para carregar um módulo, utilize o seguinte comando:
 > load <nome do módulo>
 
-![Descrição da imagem](https://imgur.com/Uq0Jeg9)
+![Descrição da imagem](https://imgur.com/Uq0Jeg9.png)
 
 ## JVM INFO:
 Nesta seção, encontram-se módulos que fazem uso da biblioteca 'java.lang.management' para apresentar em tela aspectos relevantes da Máquina Virtual Java (JVM). Esses módulos são destinados ao monitoramento de desempenho de aplicativos Java
@@ -106,48 +106,48 @@ Nesta seção, encontram-se módulos que fazem uso da biblioteca 'java.lang.mana
 * Não é necessário informar nenhum parâmetro.
 
 ## ClassLoadingMXBean:
-![Descrição da imagem](https://imgur.com/xCSrJzL)
+![Descrição da imagem](https://imgur.com/xCSrJzL.png)
 Exibe o número total de classes carregadas e descarregadas atualmente.
 
 ## CompilationMXBean:
-![Descrição da imagem](https://imgur.com/LrZ7jy4)
+![Descrição da imagem](https://imgur.com/LrZ7jy4.png)
 Exibe informações sobre o sistema de compilação Just-In-Time (JIT) da JVM.
 ![Descrição da imagem](https://imgur.com/NrEGClv)
 ## GarbageCollectorMXBean:
-![Descrição da imagem](https://imgur.com/bC5DLPY)
+![Descrição da imagem](https://imgur.com/bC5DLPY.png)
 Exibe informações sobre ‘GarbageColletor’ da JVM, como nome do coletor, como tempo gasto em memória e quantidade memória coletada.
-![Descrição da imagem](https://imgur.com/wkh8LXw)
+![Descrição da imagem](https://imgur.com/wkh8LXw.png)
 ## MemoryMXBean:
-![Descrição da imagem](https://imgur.com/v7pMsjs)
+![Descrição da imagem](https://imgur.com/v7pMsjs.png)
 Exibe informações de quantidade inicial de memória alocada para a JVM, seguida da quantidade de memória usada pela JVM, quantidade de memória, quantidade de memória alocada pela JVM e que está pronta para ser usada e por fim a quantidade máxima de memória que a JVM pode alocar, todos expressos em bytes e em kilobytes (entre parênteses).
-![Descrição da imagem](https://imgur.com/zwuEpht)
+![Descrição da imagem](https://imgur.com/zwuEpht.png)
 ## OperatingSystemMXBean:
-![Descrição da imagem](https://imgur.com/i5fYBiP)
+![Descrição da imagem](https://imgur.com/i5fYBiP.png)
 Exibe o sistema operacional reconhecido pela JVM.
-![Descrição da imagem](https://imgur.com/EGQeDf6)
+![Descrição da imagem](https://imgur.com/EGQeDf6.png)
 ## ThreadMXBean:
-![Descrição da imagem](https://imgur.com/L5p5075)
+![Descrição da imagem](https://imgur.com/L5p5075.png)
 Exibe informações sobre Threads ativas no momento na JVM e o pico de Threads que foram alcançadas durante a execução.
-![Descrição da imagem](https://imgur.com/HmkrA1t)
+![Descrição da imagem](https://imgur.com/HmkrA1t.png)
 ## Time:
-![Descrição da imagem](https://imgur.com/PDMz8Jc)
+![Descrição da imagem](https://imgur.com/PDMz8Jc.png)
 Exibe o horário obtido da JVM e o horário obtido do sistema operacional:
-![Descrição da imagem](https://imgur.com/WbK8TRD)
+![Descrição da imagem](https://imgur.com/WbK8TRD.png)
 É útil em casos em que o horário do sistema desenvolvido em Java está incorreto, muitas vezes é causado pelos da parâmetros de JVM, conforme exemplo acima.
 ## OPTS:
-![Descrição da imagem](https://imgur.com/rxYai68)
+![Descrição da imagem](https://imgur.com/rxYai68.png)
 Exibe parâmetros de JVM (Quando reconhecidos).
-![Descrição da imagem](https://imgur.com/ogkrKBq)
+![Descrição da imagem](https://imgur.com/ogkrKBq.png)
 ## Java_home:
-![Descrição da imagem](https://imgur.com/lKApnH4)
+![Descrição da imagem](https://imgur.com/lKApnH4.png)
 Exibe o diretório de instalação do Java que está executando o aplicativo atual.
-![Descrição da imagem](https://imgur.com/6wDu6Yv)
+![Descrição da imagem](https://imgur.com/6wDu6Yv.png)
 ## Todas as informações (*):
 Exibe todas as informações possíveis relacionadas a JVM:
-![Descrição da imagem](https://imgur.com/Uu0v56j)
+![Descrição da imagem](https://imgur.com/Uu0v56j.png)
 ## Database\Oracle:
-![Descrição da imagem](https://imgur.com/yyx6kkC)
-![Descrição da imagem](https://imgur.com/HOr7gOH)
+![Descrição da imagem](https://imgur.com/yyx6kkC.png)
+![Descrição da imagem](https://imgur.com/HOr7gOH.png)
 Estabelece conexão com um banco de dados Oracle utilizando o driver da proprietária.
 ### Parâmetros:
 | Comando | Descrição |
@@ -159,13 +159,15 @@ Estabelece conexão com um banco de dados Oracle utilizando o driver da propriet
 * A porta padrão para bancos de dados Oracle é 1521.
 
 ### Casos de uso:
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/3nV0z6R.png)
+![Descrição da imagem](https://imgur.com/O1rum0r.png)
+
+
 
 ## Database\MYSQL:
 Estabelece conexão com um banco de dados MySQL utilizando o driver específico da provedora, seguindo a mesma lógica abordada no item Database\Oracle.
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/jUGX4AB.png)
+![Descrição da imagem](https://imgur.com/JcUbaXT.png)
 ### Parâmetros:
 | Variável | Descrição |
 | ------ | ------ |
@@ -179,8 +181,8 @@ Estabelece conexão com um banco de dados MySQL utilizando o driver específico 
 
 ## Database\Microsoft SQL Server:
 Estabelece conexão com um banco de dados Microsoft SQL Server utilizando o driver da proprietária, segue a mesma lógica abordada no item Database\Oracle.
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/GTTny9U.png)
+![Descrição da imagem](https://imgur.com/NjSSe56.png)
 ### Parâmetros:
 | Variável | Descrição |
 | ------ | ------ |
@@ -191,8 +193,8 @@ Estabelece conexão com um banco de dados Microsoft SQL Server utilizando o driv
 * A porta padrão para banco de dados Microsoft SQL Server é a 1433.
 
 ## SMB:
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/GI9LXBA.png)
+![Descrição da imagem](https://imgur.com/viG9iif.png)
 Estabelece uma conexão SMB (Server Message Block) com um servidor de arquivos.
 | Variável | Descrição |
 | ------ | ------ |
@@ -204,15 +206,15 @@ Estabelece uma conexão SMB (Server Message Block) com um servidor de arquivos.
 * A máquina (servidor) e diretório podem ser encontrados no Tasy HTML5 em Administração do sistema > Parâmetros > Armazenamento de arquivos.
 
 ### Obtendo os parâmetros necessários do Tasy:
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/3PL2Q3T.png)
+![Descrição da imagem](https://imgur.com/xjGsqwg.png)
 ### Casos de uso:
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/BRVDgYv.png)
+![Descrição da imagem](https://imgur.com/9ZFEqUK.png)
 
 ## SMTP:
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/G4RgqWP.png)
+![Descrição da imagem](https://imgur.com/WZYlB2h.png)
 Estabelece uma conexão com um servidor de e-mails através do protocolo SMTP (Simple Mail Transfer Protocol).
 ### Parâmetros obrigatórios (*):
 | Variável | Descrição | Parâmetro do Tasy (Menu do sistema) |
@@ -234,7 +236,7 @@ Os valores das variáveis abaixo são opcionais, ou seja, não é obrigatório s
 | 'Aut' | Utiliza autenticação para envio de e-mails. | y | Parâmetro [96] - Utiliza autenticação para envio de e-mails;
 | 'Stls' | Emitir comando STARTTLS. | y | Parâmetro [110] - Utiliza envio de e-mail através do protocolo SSL;
 ### Obtendo os parâmetros necessários do Tasy:
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/i04ksRc.png)
 ### Protocolos aceitos:
 | Protocolo | Descrição | Versão do Java (Requisito) |
 | ------ | ------ | ------ |
@@ -245,23 +247,24 @@ Os valores das variáveis abaixo são opcionais, ou seja, não é obrigatório s
 | 'TLSv1.2' | Transport Layer Security | Java ≥7
 | 'TLSv1.3' | Transport Layer Security | Java ≥11
 ### Casos de uso:
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](url.png)
+![Descrição da imagem](url.png)
 * Em alguns casos a própria biblioteca vai informar uma documentação completa da provedora sobre o erro obtido, conforme exemplos.
 
-![Descrição da imagem](url)
-![Descrição da imagem](url)
-![Descrição da imagem](url)
-![Descrição da imagem](url)
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/ppJWG4S.png)
+![Descrição da imagem](https://imgur.com/MPnJGAL.png)
+![Descrição da imagem](https://imgur.com/OgjqZxU.png)
+![Descrição da imagem](https://imgur.com/31wVRJu.png)
+![Descrição da imagem](https://imgur.com/9pCcgbH.png)
+![Descrição da imagem](https://imgur.com/HJdu5WW.png)
+![Descrição da imagem](https://imgur.com/xp5oIFO.png)
 * Em alguns casos mesmo informando todas as parametrizações de autenticação e do servidor de e-mails corretamente, algumas provedoras solicitam o uso de Senha de APP.
 
-![Descrição da imagem](url)
-
+![Descrição da imagem](https://imgur.com/8oCjMv1.png)
+![Descrição da imagem](https://imgur.com/NvRZ31c.png)
 ## SOCKET:
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/eagla9Y.png)
+![Descrição da imagem](https://imgur.com/2OPlCjQ.png)
 
 Estabelece comunicação entre um cliente e servidor. Socket fornece uma abstração de mais baixo nível das operações de rede, tornando o desenvolvimento de software mais simplificado sem a necessidade de conhecer a fundo redes de computadores.
 ### Parâmetros:
@@ -283,10 +286,10 @@ Estabelece comunicação entre um cliente e servidor. Socket fornece uma abstra�
 | 'SSH' | 	Secure Shell | 22 |
 
 ### Casos de uso:
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/Vb8GRRu.png)
 ## HTTP Post Request:
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/isxrpEM.png)
+![Descrição da imagem](https://imgur.com/ixbwFnk.png)
 Realiza uma requisição utilizando o protocolo HTTP com o método Post em um servidor. O método POST é utilizado pelos navegadores ou aplicativos para enviar dados a um servidor.
 ### Parâmetros:
 | Váriavel | Descrição |
@@ -295,26 +298,26 @@ Realiza uma requisição utilizando o protocolo HTTP com o método Post em um se
 | data | Dados a serem enviados ao servidor. |
 
 ### Casos de uso:
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/mESlKt2.png)
 Nesse exemplo o servidor recebe a solicitação, mas não terá dados para processar. O comportamento para esse tipo de requisição dependerá de como foi feito a implementação do servidor e da aplicação que está sendo acessada, neste caso, o servidor apenas retornou o corpo HTML, em outros casos pode apenas retornar um status 200 (OK), indicando que a requisição foi bem-sucedida.
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/iNOml9G.png)
+![Descrição da imagem](https://imgur.com/deaIqcx.png)
 * Nesse exemplo é enviado para o servidor como dados para serem processados o projeto do Appmanager “TasyEMR”, mas pode ser utilizado outros projetos (serviços da Philips), como por exemplo o “HealthProfessional”, “TasyJava”, “TasyReports”, “TasySchedulerWeb”, “Patient”, “ResultsPortal”, etc.
 
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/UhOi72i.png)
 * O erro acima geralmente acontece quando o sistema não consegue construir uma cadeia de certificação confiável até o certificado raiz, sendo necessário atualizar os certificados no Java Keystore, usando a ferramenta “Keytool”.
 
-![Descrição da imagem](url)
-![Descrição da imagem](url)
-![Descrição da imagem](url)
-![Descrição da imagem](url)
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/RZcH7fe.png)
+![Descrição da imagem](https://imgur.com/m8BrMNK.png)
+![Descrição da imagem](https://imgur.com/FR6TReM.png)
+![Descrição da imagem](https://imgur.com/XBRTxEG.png)
+![Descrição da imagem](https://imgur.com/Xs7QUkN.png)
+![Descrição da imagem](https://imgur.com/XmwRM3w.png)
 
 ## SMB Leitura e escrita (SMBRW):
 
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/xl2nC1x.png)
+![Descrição da imagem](https://imgur.com/hj1ETuk.png)
 Estabelece uma conexão SMB (Server Message Block) com um servidor de arquivos, envia um arquivo de texto para o diretório, realiza a leitura desse mesmo arquivo de texto e retorna essa informação ao cliente para validação de leitura e escrita do diretório utilizando o usuário e senha informados no parâmetro.
 
 ### Parâmetros:
@@ -326,7 +329,7 @@ Estabelece uma conexão SMB (Server Message Block) com um servidor de arquivos, 
 | pwd | Senha do usuário para autenticação do compartilhamento de rede. |
 
 ### Casos de uso:
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/GrNJEbI.png)
 * Ao rodar o módulo, será enviado um arquivo de texto ao servidor, o arquivo de texto terá o nome padrão “smbRW+(dd-MM-yyyy-HH:mm:ssss)”, servindo como um identificador único para o nome do arquivo. Se o envio de arquivo ocorrer corretamente, na sequência haverá a tentativa de leitura do arquivo de texto e será retornado ao cliente o texto do arquivo de dentro do servidor, utilizando as configurações do usuário e senha pertencentes ao domínio.
 
 
@@ -336,6 +339,6 @@ O Tasy permite a exportação dos Parâmetros do menu do sistema para um arquivo
 > load xml
 
 ### Etapas:
-![Descrição da imagem](url)
-![Descrição da imagem](url)
-![Descrição da imagem](url)
+![Descrição da imagem](https://imgur.com/M8IV269.png)
+![Descrição da imagem](https://imgur.com/OIKehhc.png)
+![Descrição da imagem](https://imgur.com/30bLAlW.png)
