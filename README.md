@@ -4,7 +4,7 @@
     <img src="https://i.imgur.com/kTWd338.png" alt="Descrição da imagem" width="100" height="100">
 </div>
 
-Esse aplicativo permite realizar uma vários de testes de conectividade e validações de rede. Foi desenvolvido em Java, deste modo, utiliza a JVM da estação para processar suas ações, o que a torna semelhante aos produtos da Philips, como o Philips Application Manager e o Tasy (HTML5/Java), ambos escritos em Java. Sua interface foi projetada em formato de console, para execução tanto em estações locais quanto em servidores que hospedam o Tasy ou outros aplicativos web da Philips, assim como em máquinas que hospedam o banco de dados. O propósito é permitir a realização de testes de conectividade para identificar problemas em ambientes dos clientes. A aplicação, dentro do contexto específico de cada módulo, gera um log que evidencia problemas, mesmo que esteja fora do sistema Tasy.
+Esse aplicativo permite realizar uma vários de testes de conectividade e validações de rede. Foi desenvolvido em Java, deste modo, utiliza a JVM da estação para processar suas ações, o que a torna semelhante aos produtos da Philips, como o Philips Application Manager e o Tasy (HTML5/Java), ambos escritos em Java. Sua interface foi projetada em formato de console, para execução tanto em estações locais quanto em servidores que hospedam o Tasy ou outros aplicativos web da Philips, assim como em máquinas que hospedam o banco de dados. O propósito é permitir a realização de testes de conectividade para identificar problemas em ambientes dos clientes. A aplicação, dentro do contexto específico de cada módulo, gera um log que evidencia problemas, mesmo que esteja fora do sistema Tasy.  
 ## Features
 
 - ClassLoadingMXBean
@@ -27,13 +27,13 @@ Esse aplicativo permite realizar uma vários de testes de conectividade e valida
 - SMB Leitura e escrita (SMBRW)
 - XML
 
-Como o aplicativo utiliza um .JAR (Java Archive) ele pode ser executado em qualquer sistema operacional que tenha uma Maquina Virtual Java (JVM) compatível, ou seja, pode ser utilizando em um sistema Windows ou Linux comumente utilizado pelo mercado, o código fonte foi desenvolvido para detectar o sistema operacional.
+Como o aplicativo utiliza um .JAR (Java Archive) ele pode ser executado em qualquer sistema operacional que tenha uma Maquina Virtual Java (JVM) compatível, ou seja, pode ser utilizando em um sistema Windows ou Linux comumente utilizado pelo mercado, o código fonte foi desenvolvido para detectar o sistema operacional.  
 
 ## Tipos arquivos
-Há dois scripts disponíveis: um denominado 'start.bat' projetado para ser utilizado em sistemas operacionais Windows, e outro chamado 'start.sh' destinado a sistemas operacionais Linux. Ambos os scripts iniciam a execução do arquivo 'networkTester.jar', que encapsula todas as classes principais do aplicativo. É importante observar que há uma dependência em relação às bibliotecas externas localizadas na pasta '/lib'. Essas bibliotecas devem ser obrigatoriamente colocadas no diretório raiz para garantir o correto funcionamento do aplicativo.
+Há dois scripts disponíveis: um denominado 'start.bat' projetado para ser utilizado em sistemas operacionais Windows, e outro chamado 'start.sh' destinado a sistemas operacionais Linux. Ambos os scripts iniciam a execução do arquivo 'networkTester.jar', que encapsula todas as classes principais do aplicativo. É importante observar que há uma dependência em relação às bibliotecas externas localizadas na pasta '/lib'. Essas bibliotecas devem ser obrigatoriamente colocadas no diretório raiz para garantir o correto funcionamento do aplicativo.  
 
 ## Comandos
-O processo envolve duas telas fundamentais: a primeira destinada à seleção dos módulos e a segunda voltada para a parametrização desses módulos.
+O processo envolve duas telas fundamentais: a primeira destinada à seleção dos módulos e a segunda voltada para a parametrização desses módulos.  
 ![Descrição da imagem](https://imgur.com/SXpZlP2.png)  
 
 | Comando | Descrição |
@@ -55,12 +55,12 @@ O processo envolve duas telas fundamentais: a primeira destinada à seleção do
 | 'exit' ou 'x' | Encerra o console. |
 
 ## Parâmetros/Variáveis
-Ao utilizar o comando ‘run’ todas as variáveis obrigatórias para a execução do módulo serão utilizadas, porém, é necessário fornecê-las previamente.
+Ao utilizar o comando ‘run’ todas as variáveis obrigatórias para a execução do módulo serão utilizadas, porém, é necessário fornecê-las previamente.  
 
-Para atribuir um valor a uma variável, utilize o comando a seguir:
+Para atribuir um valor a uma variável, utilize o comando a seguir:  
 > set <variável> <valor>
 
-Caso deseje limpar o valor de uma variável, utilize o comando:
+Caso deseje limpar o valor de uma variável, utilize o comando:  
 > unset <variável>
 
 ![Descrição da imagem](https://imgur.com/4q3Xez3.png)  
@@ -86,29 +86,29 @@ Caso deseje limpar o valor de uma variável, utilize o comando:
 | 'dmn' | SMB | Dominio.
 
 ## Parâmetros obrigatórios (*):
-Todos os parâmetros marcados com (*) são obrigatórios. Caso não sejam informados, a execução do módulo por meio do comando 'run' não será possível.
+Todos os parâmetros marcados com (*) são obrigatórios. Caso não sejam informados, a execução do módulo por meio do comando 'run' não será possível.  
 
 ![Descrição da imagem](https://imgur.com/f9UbGjR.png)  
 
 ## Módulos:
-Para visualizar todos os módulos disponíveis, você pode utilizar o comando 'hp' ou 'help'. Os módulos são categorizados por bibliotecas, seguidos pelo nome do respectivo módulo.
+Para visualizar todos os módulos disponíveis, você pode utilizar o comando 'hp' ou 'help'. Os módulos são categorizados por bibliotecas, seguidos pelo nome do respectivo módulo.  
 
 ![Descrição da imagem](https://imgur.com/Se4Ttfx.png)  
 
 ## Carregar um módulo:
-Para carregar um módulo, utilize o seguinte comando:
+Para carregar um módulo, utilize o seguinte comando:  
 > load <nome do módulo>
 
 ![Descrição da imagem](https://imgur.com/Uq0Jeg9.png)  
 
 ## JVM INFO:
-Nesta seção, encontram-se módulos que fazem uso da biblioteca 'java.lang.management' para apresentar em tela aspectos relevantes da Máquina Virtual Java (JVM). Esses módulos são destinados ao monitoramento de desempenho de aplicativos Java
+Nesta seção, encontram-se módulos que fazem uso da biblioteca 'java.lang.management' para apresentar em tela aspectos relevantes da Máquina Virtual Java (JVM). Esses módulos são destinados ao monitoramento de desempenho de aplicativos Java.  
 
 * Não é necessário informar nenhum parâmetro.
 
 ## ClassLoadingMXBean:
 ![Descrição da imagem](https://imgur.com/xCSrJzL.png)  
-Exibe o número total de classes carregadas e descarregadas atualmente.
+Exibe o número total de classes carregadas e descarregadas atualmente.  
 
 ## CompilationMXBean:
 ![Descrição da imagem](https://imgur.com/LrZ7jy4.png)  
@@ -116,40 +116,40 @@ Exibe informações sobre o sistema de compilação Just-In-Time (JIT) da JVM.
 ![Descrição da imagem](https://imgur.com/NrEGClv.png)
 ## GarbageCollectorMXBean:
 ![Descrição da imagem](https://imgur.com/bC5DLPY.png)  
-Exibe informações sobre ‘GarbageColletor’ da JVM, como nome do coletor, como tempo gasto em memória e quantidade memória coletada.
+Exibe informações sobre ‘GarbageColletor’ da JVM, como nome do coletor, como tempo gasto em memória e quantidade memória coletada.  
 ![Descrição da imagem](https://imgur.com/wkh8LXw.png)  
 ## MemoryMXBean:
 ![Descrição da imagem](https://imgur.com/v7pMsjs.png)  
-Exibe informações de quantidade inicial de memória alocada para a JVM, seguida da quantidade de memória usada pela JVM, quantidade de memória, quantidade de memória alocada pela JVM e que está pronta para ser usada e por fim a quantidade máxima de memória que a JVM pode alocar, todos expressos em bytes e em kilobytes (entre parênteses).
+Exibe informações de quantidade inicial de memória alocada para a JVM, seguida da quantidade de memória usada pela JVM, quantidade de memória, quantidade de memória alocada pela JVM e que está pronta para ser usada e por fim a quantidade máxima de memória que a JVM pode alocar, todos expressos em bytes e em kilobytes (entre parênteses).  
 ![Descrição da imagem](https://imgur.com/zwuEpht.png)  
 ## OperatingSystemMXBean:
 ![Descrição da imagem](https://imgur.com/i5fYBiP.png)  
-Exibe o sistema operacional reconhecido pela JVM.
+Exibe o sistema operacional reconhecido pela JVM.  
 ![Descrição da imagem](https://imgur.com/EGQeDf6.png)  
 ## ThreadMXBean:
 ![Descrição da imagem](https://imgur.com/L5p5075.png)  
-Exibe informações sobre Threads ativas no momento na JVM e o pico de Threads que foram alcançadas durante a execução.
+Exibe informações sobre Threads ativas no momento na JVM e o pico de Threads que foram alcançadas durante a execução.  
 ![Descrição da imagem](https://imgur.com/HmkrA1t.png)  
 ## Time:
 ![Descrição da imagem](https://imgur.com/PDMz8Jc.png)  
-Exibe o horário obtido da JVM e o horário obtido do sistema operacional:
+Exibe o horário obtido da JVM e o horário obtido do sistema operacional:  
 ![Descrição da imagem](https://imgur.com/WbK8TRD.png)  
-É útil em casos em que o horário do sistema desenvolvido em Java está incorreto, muitas vezes é causado pelos da parâmetros de JVM, conforme exemplo acima.
+É útil em casos em que o horário do sistema desenvolvido em Java está incorreto, muitas vezes é causado pelos da parâmetros de JVM, conforme exemplo acima.  
 ## OPTS:
 ![Descrição da imagem](https://imgur.com/rxYai68.png)  
-Exibe parâmetros de JVM (Quando reconhecidos).
+Exibe parâmetros de JVM (Quando reconhecidos).  
 ![Descrição da imagem](https://imgur.com/ogkrKBq.png)  
 ## Java_home:
 ![Descrição da imagem](https://imgur.com/lKApnH4.png)  
-Exibe o diretório de instalação do Java que está executando o aplicativo atual.
+Exibe o diretório de instalação do Java que está executando o aplicativo atual.  
 ![Descrição da imagem](https://imgur.com/6wDu6Yv.png)  
 ## Todas as informações (*):
-Exibe todas as informações possíveis relacionadas a JVM:
+Exibe todas as informações possíveis relacionadas a JVM:  
 ![Descrição da imagem](https://imgur.com/Uu0v56j.png)  
 ## Database\Oracle:
 ![Descrição da imagem](https://imgur.com/yyx6kkC.png)  
 ![Descrição da imagem](https://imgur.com/HOr7gOH.png)  
-Estabelece conexão com um banco de dados Oracle utilizando o driver da proprietária.
+Estabelece conexão com um banco de dados Oracle utilizando o driver da proprietária.  
 ### Parâmetros:
 | Comando | Descrição |
 | ------ | ------ |
@@ -166,7 +166,7 @@ Estabelece conexão com um banco de dados Oracle utilizando o driver da propriet
 
 
 ## Database\MYSQL:
-Estabelece conexão com um banco de dados MySQL utilizando o driver específico da provedora, seguindo a mesma lógica abordada no item Database\Oracle.
+Estabelece conexão com um banco de dados MySQL utilizando o driver específico da provedora, seguindo a mesma lógica abordada no item Database\Oracle.  
 ![Descrição da imagem](https://imgur.com/jUGX4AB.png)  
 ![Descrição da imagem](https://imgur.com/JcUbaXT.png)  
 ### Parâmetros:
@@ -181,7 +181,7 @@ Estabelece conexão com um banco de dados MySQL utilizando o driver específico 
 
 
 ## Database\Microsoft SQL Server:
-Estabelece conexão com um banco de dados Microsoft SQL Server utilizando o driver da proprietária, segue a mesma lógica abordada no item Database\Oracle.
+Estabelece conexão com um banco de dados Microsoft SQL Server utilizando o driver da proprietária, segue a mesma lógica abordada no item Database\Oracle.  
 ![Descrição da imagem](https://imgur.com/GTTny9U.png)  
 ![Descrição da imagem](https://imgur.com/NjSSe56.png)  
 ### Parâmetros:
@@ -196,7 +196,7 @@ Estabelece conexão com um banco de dados Microsoft SQL Server utilizando o driv
 ## SMB:
 ![Descrição da imagem](https://imgur.com/GI9LXBA.png)  
 ![Descrição da imagem](https://imgur.com/viG9iif.png)  
-Estabelece uma conexão SMB (Server Message Block) com um servidor de arquivos.
+Estabelece uma conexão SMB (Server Message Block) com um servidor de arquivos.  
 | Variável | Descrição |
 | ------ | ------ |
 | 'host' | Endereço do servidor de arquivos. |
@@ -216,7 +216,7 @@ Estabelece uma conexão SMB (Server Message Block) com um servidor de arquivos.
 ## SMTP:
 ![Descrição da imagem](https://imgur.com/G4RgqWP.png)  
 ![Descrição da imagem](https://imgur.com/WZYlB2h.png)  
-Estabelece uma conexão com um servidor de e-mails através do protocolo SMTP (Simple Mail Transfer Protocol).
+Estabelece uma conexão com um servidor de e-mails através do protocolo SMTP (Simple Mail Transfer Protocol).  
 ### Parâmetros obrigatórios (*):
 | Variável | Descrição | Parâmetro do Tasy (Menu do sistema) |
 | ------ | ------ | ------ |
@@ -227,7 +227,7 @@ Estabelece uma conexão com um servidor de e-mails através do protocolo SMTP (S
 | 'pwd' | Senha do usuário para autenticação do compartilhamento de rede. | Parâmetro [40] - Senha para autenticação do SMTP do envio de e-mails;
 
 ### Parâmetros opcionais:
-Os valores das variáveis abaixo são opcionais, ou seja, não é obrigatório serem informadas, já existe um valor padrão:
+Os valores das variáveis abaixo são opcionais, ou seja, não é obrigatório serem informadas, já existe um valor padrão:  
 | Variável | Descrição | Valor padrão | Parâmetro do Tasy (Menu do sistema)
 | ------ | ------ | ------ | ------ |
 | 'Des' | Destinatário do e-mail. | Preenchido automaticamente ao informar o ‘rem’ (Des = rem); | NA
@@ -266,7 +266,7 @@ Os valores das variáveis abaixo são opcionais, ou seja, não é obrigatório s
 ![Descrição da imagem](https://imgur.com/eagla9Y.png)  
 ![Descrição da imagem](https://imgur.com/2OPlCjQ.png)  
 
-Estabelece comunicação entre um cliente e servidor. Socket fornece uma abstração de mais baixo nível das operações de rede, tornando o desenvolvimento de software mais simplificado sem a necessidade de conhecer a fundo redes de computadores.
+Estabelece comunicação entre um cliente e servidor. Socket fornece uma abstração de mais baixo nível das operações de rede, tornando o desenvolvimento de software mais simplificado sem a necessidade de conhecer a fundo redes de computadores.  
 ### Parâmetros:
 | Variável | Descrição |
 | ------ | ------ |
@@ -290,7 +290,7 @@ Estabelece comunicação entre um cliente e servidor. Socket fornece uma abstra�
 ## HTTP Post Request:
 ![Descrição da imagem](https://imgur.com/isxrpEM.png)  
 ![Descrição da imagem](https://imgur.com/ixbwFnk.png)  
-Realiza uma requisição utilizando o protocolo HTTP com o método Post em um servidor. O método POST é utilizado pelos navegadores ou aplicativos para enviar dados a um servidor.
+Realiza uma requisição utilizando o protocolo HTTP com o método Post em um servidor. O método POST é utilizado pelos navegadores ou aplicativos para enviar dados a um servidor.  
 ### Parâmetros:
 | Váriavel | Descrição |
 | ------ | ------ |
@@ -299,7 +299,7 @@ Realiza uma requisição utilizando o protocolo HTTP com o método Post em um se
 
 ### Casos de uso:
 ![Descrição da imagem](https://imgur.com/mESlKt2.png)  
-Nesse exemplo o servidor recebe a solicitação, mas não terá dados para processar. O comportamento para esse tipo de requisição dependerá de como foi feito a implementação do servidor e da aplicação que está sendo acessada, neste caso, o servidor apenas retornou o corpo HTML, em outros casos pode apenas retornar um status 200 (OK), indicando que a requisição foi bem-sucedida.
+Nesse exemplo o servidor recebe a solicitação, mas não terá dados para processar. O comportamento para esse tipo de requisição dependerá de como foi feito a implementação do servidor e da aplicação que está sendo acessada, neste caso, o servidor apenas retornou o corpo HTML, em outros casos pode apenas retornar um status 200 (OK), indicando que a requisição foi bem-sucedida.  
 ![Descrição da imagem](https://imgur.com/iNOml9G.png)  
 ![Descrição da imagem](https://imgur.com/deaIqcx.png)  
 * Nesse exemplo é enviado para o servidor como dados para serem processados o projeto do Appmanager “TasyEMR”, mas pode ser utilizado outros projetos (serviços da Philips), como por exemplo o “HealthProfessional”, “TasyJava”, “TasyReports”, “TasySchedulerWeb”, “Patient”, “ResultsPortal”, etc.
@@ -319,7 +319,7 @@ Nesse exemplo o servidor recebe a solicitação, mas não terá dados para proce
 ![Descrição da imagem](https://imgur.com/xl2nC1x.png)  
 ![Descrição da imagem](https://imgur.com/hj1ETuk.png)  
 
-Estabelece uma conexão SMB (Server Message Block) com um servidor de arquivos, envia um arquivo de texto para o diretório, realiza a leitura desse mesmo arquivo de texto e retorna essa informação ao cliente para validação de leitura e escrita do diretório utilizando o usuário e senha informados no parâmetro.
+Estabelece uma conexão SMB (Server Message Block) com um servidor de arquivos, envia um arquivo de texto para o diretório, realiza a leitura desse mesmo arquivo de texto e retorna essa informação ao cliente para validação de leitura e escrita do diretório utilizando o usuário e senha informados no parâmetro.  
 
 ### Parâmetros:
 | Váriavel | Descrição |
@@ -336,7 +336,7 @@ Estabelece uma conexão SMB (Server Message Block) com um servidor de arquivos, 
 
 
 ## XML:
-O Tasy permite a exportação dos Parâmetros do menu do sistema para um arquivo no formato .XML, a ultima funcionalidade feita para o aplicativo foi que ele permitisse importar esses parâmetros XML, atribuindo as variáveis do APP, sendo necessário transferir o arquivo .XML para o diretório ‘\NTA\class\xml’ e na sequência utilizar o comando abaixo:
+O Tasy permite a exportação dos Parâmetros do menu do sistema para um arquivo no formato .XML, a ultima funcionalidade feita para o aplicativo foi que ele permitisse importar esses parâmetros XML, atribuindo as variáveis do APP, sendo necessário transferir o arquivo .XML para o diretório ‘\NTA\class\xml’ e na sequência utilizar o comando abaixo:  
 > load xml
 
 ### Etapas:
