@@ -112,7 +112,7 @@ Exibe o número total de classes carregadas e descarregadas atualmente.
 
 ## CompilationMXBean:
 ![Descrição da imagem](https://imgur.com/LrZ7jy4.png)  
-Exibe informações sobre o sistema de compilação Just-In-Time (JIT) da JVM.
+Exibe informações sobre o sistema de compilação Just-In-Time (JIT) da JVM.  
 ![Descrição da imagem](https://imgur.com/NrEGClv.png)
 ## GarbageCollectorMXBean:
 ![Descrição da imagem](https://imgur.com/bC5DLPY.png)  
