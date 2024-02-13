@@ -1,7 +1,7 @@
 # NTA - NetworkTester
 
 <div style="text-align:center;">
-    <img src="https://i.imgur.com/xchptYP.png" alt="Descrição da imagem" width="300">
+    <img src="https://imgur.com/kTWd338.png" alt="Descrição da imagem" width="100" height="100">
 </div>
 
 Esse aplicativo permite realizar uma vários de testes de conectividade e validações de rede. Foi desenvolvido em Java, deste modo, utiliza a JVM da estação para processar suas ações, o que a torna semelhante aos produtos da Philips, como o Philips Application Manager e o Tasy (HTML5/Java), ambos escritos em Java. Sua interface foi projetada em formato de console, para execução tanto em estações locais quanto em servidores que hospedam o Tasy ou outros aplicativos web da Philips, assim como em máquinas que hospedam o banco de dados. O propósito é permitir a realização de testes de conectividade para identificar problemas em ambientes dos clientes. A aplicação, dentro do contexto específico de cada módulo, gera um log que evidencia problemas, mesmo que esteja fora do sistema Tasy.
