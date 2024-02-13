@@ -114,7 +114,7 @@ Exibe o número total de classes carregadas e descarregadas atualmente.
 ## CompilationMXBean:
 ![Descrição da imagem](https://imgur.com/LrZ7jy4.png)
 Exibe informações sobre o sistema de compilação Just-In-Time (JIT) da JVM.
-![Descrição da imagem](https://imgur.com/NrEGClv)
+![Descrição da imagem](https://imgur.com/NrEGClv.png)
 ## GarbageCollectorMXBean:
 ![Descrição da imagem](https://imgur.com/bC5DLPY.png)
 Exibe informações sobre ‘GarbageColletor’ da JVM, como nome do coletor, como tempo gasto em memória e quantidade memória coletada.
@@ -249,20 +249,19 @@ Os valores das variáveis abaixo são opcionais, ou seja, não é obrigatório s
 | 'TLSv1.2' | Transport Layer Security | Java ≥7
 | 'TLSv1.3' | Transport Layer Security | Java ≥11
 ### Casos de uso:
-![Descrição da imagem](url.png)
-![Descrição da imagem](url.png)
-* Em alguns casos a própria biblioteca vai informar uma documentação completa da provedora sobre o erro obtido, conforme exemplos.
 
 ![Descrição da imagem](https://imgur.com/ppJWG4S.png)
 ![Descrição da imagem](https://imgur.com/MPnJGAL.png)
+* Em alguns casos a própria biblioteca vai informar uma documentação completa da provedora sobre o erro obtido, conforme exemplos.
+
 ![Descrição da imagem](https://imgur.com/OgjqZxU.png)
 ![Descrição da imagem](https://imgur.com/31wVRJu.png)
 ![Descrição da imagem](https://imgur.com/9pCcgbH.png)
 ![Descrição da imagem](https://imgur.com/HJdu5WW.png)
 ![Descrição da imagem](https://imgur.com/xp5oIFO.png)
-* Em alguns casos mesmo informando todas as parametrizações de autenticação e do servidor de e-mails corretamente, algumas provedoras solicitam o uso de Senha de APP.
-
 ![Descrição da imagem](https://imgur.com/8oCjMv1.png)
+
+* Em alguns casos mesmo informando todas as parametrizações de autenticação e do servidor de e-mails corretamente, algumas provedoras solicitam o uso de Senha de APP.
 ![Descrição da imagem](https://imgur.com/NvRZ31c.png)
 ## SOCKET:
 ![Descrição da imagem](https://imgur.com/eagla9Y.png)
@@ -320,6 +319,7 @@ Nesse exemplo o servidor recebe a solicitação, mas não terá dados para proce
 
 ![Descrição da imagem](https://imgur.com/xl2nC1x.png)
 ![Descrição da imagem](https://imgur.com/hj1ETuk.png)
+
 Estabelece uma conexão SMB (Server Message Block) com um servidor de arquivos, envia um arquivo de texto para o diretório, realiza a leitura desse mesmo arquivo de texto e retorna essa informação ao cliente para validação de leitura e escrita do diretório utilizando o usuário e senha informados no parâmetro.
 
 ### Parâmetros:
