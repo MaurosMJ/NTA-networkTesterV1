@@ -1,9 +1,10 @@
 package com.whebsys.nta.model.service.smtp;
 
+import com.whebsys.nta.application.service.interfaces.Module;
+import com.whebsys.nta.ui.ColorUI;
 import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
-import org.fusesource.jansi.AnsiConsole;
 
 /**
  * Class for establishing an SMTP connection and sending emails.
@@ -24,13 +25,9 @@ import org.fusesource.jansi.AnsiConsole;
  *
  * @Author: Mauros Milach Junior (github.com/MaurosMJ)
  */
-public class SmtpClient {
+public class SmtpClient implements Module {
 
-    private final String resetColor = "\u001B[0m";
-    private final String redColor = "\u001B[91m";
-    private final String greenColor = "\u001B[32m";
-
-    public void smtpH(String host, String port, String prot, String rem, String des, String pwd, String stls, String aut, String tmsg, String pmsg, String qtdm) {
+    public void PerformServerConnection(String host, String port, String aut, String stls, String prot, String rem, String des, String pwd, String url, String usr, String tmsg, String pmsg, String qtdm, String dmn, String mhost, String mpwd, String shost, String spwd) {
 
         int a;
         if (!"1 (default)".equals(qtdm) && !"0".equals(qtdm)) {
@@ -51,11 +48,11 @@ public class SmtpClient {
         try {
             Message mensagem = createEmailMessage(session, rem, des, tmsg, pmsg);
             sendEmail(a, mensagem);
-            System.out.println(greenColor+"Email sent successfully!"+resetColor);
+            System.out.println(ColorUI.ANSI_GREEN+"Email sent successfully!"+ColorUI.ANSI_RESET);
         } catch (MessagingException e) {
-            System.out.print(redColor);
-            System.out.println(redColor+"Error sending the email: " + e.getMessage()+resetColor);
-            System.out.print(resetColor);
+            System.out.print(ColorUI.ANSI_RED);
+            System.out.println(ColorUI.ANSI_RED+"Error sending the email: " + e.getMessage()+ColorUI.ANSI_RESET);
+            System.out.print(ColorUI.ANSI_RED);
         }
     }
 

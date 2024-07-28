@@ -1,8 +1,9 @@
 package com.whebsys.nta.model.service.socket;
 
+import com.whebsys.nta.application.service.interfaces.Module;
+import com.whebsys.nta.ui.ColorUI;
 import java.io.IOException;
 import java.net.Socket;
-import org.fusesource.jansi.AnsiConsole;
 
 /**
  * Class for establishing a socket connection.
@@ -21,27 +22,23 @@ import org.fusesource.jansi.AnsiConsole;
  *
  * @Author: Mauros Milach Junior (github.com/MaurosMJ)
  */
-public class SocketClient {
+public class SocketClient implements Module {
 
-    private final String resetColor = "\u001B[0m";
-    private final String redColor = "\u001B[91m";
-    private final String greenColor = "\u001B[32m";
-
-    public void socketM(String host, int porta) {
-        if (host == null || host.isEmpty() || porta <= 0) {
-            System.out.println(redColor+"Argumentos inválidos para estabelecer a conexão.");
+    public void PerformServerConnection(String host, String port, String aut, String stls, String prot, String rem, String des, String pwd, String url, String usr, String tmsg, String pmsg, String qtdm, String dmn, String mhost, String mpwd, String shost, String spwd) {
+        if (host == null || host.isEmpty() || Integer.parseInt(port) <= 0) {
+            System.out.println(ColorUI.ANSI_RED + "Argumentos inválidos para estabelecer a conexão.");
             return;
         }
         try {
-            try (Socket socket = new Socket(host, porta)) {
-                System.out.println(greenColor+"Successful connection with " + host + ":" + porta);
+            try (Socket socket = new Socket(host, Integer.parseInt(port))) {
+                System.out.println(ColorUI.ANSI_GREEN + "Successful connection with " + host + ":" + Integer.parseInt(port));
                 socket.close();
             }
         } catch (IOException e) {
-            System.out.println(redColor+"Unable to connect to " + host + ":" + porta);
-            System.out.print(redColor);
+            System.out.println(ColorUI.ANSI_RED + "Unable to connect to " + host + ":" + Integer.parseInt(port));
+            System.out.print(ColorUI.ANSI_RED);
             e.printStackTrace();
-            System.out.print(resetColor);
+            System.out.print(ColorUI.ANSI_RESET);
         }
     }
 }

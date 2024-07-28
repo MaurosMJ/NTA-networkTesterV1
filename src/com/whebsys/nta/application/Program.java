@@ -5,36 +5,18 @@ import com.whebsys.nta.ui.ConsoleUI;
 import com.whebsys.nta.model.service.db.sqlserver.SqlServerClient;
 import com.whebsys.nta.model.service.db.mysql.MySqlClient;
 import com.whebsys.nta.model.service.db.oracle.OracleClient;
-import com.whebsys.nta.model.service.smb.SmbClient;
+import com.whebsys.nta.model.service.jvm.JvmMonitoringClient;
+import com.whebsys.nta.model.service.smb.SmbClientRW;
 import com.whebsys.nta.model.service.smtp.SmtpClient;
 import com.whebsys.nta.model.service.socket.SocketClient;
+import com.whebsys.nta.ui.ColorUI;
 import com.whebsys.nta.ui.ModuleUI;
 import com.whebsys.utils.Sys;
-import java.nio.file.*;
-import java.util.stream.Stream;
-import org.w3c.dom.Document;
+import com.whebsys.utils.XMLReader;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.management.ClassLoadingMXBean;
-import java.lang.management.CompilationMXBean;
-import java.lang.management.GarbageCollectorMXBean;
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
-import java.lang.management.OperatingSystemMXBean;
-import java.lang.management.ThreadMXBean;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 import org.w3c.dom.NodeList;
 
 /**
@@ -65,10 +47,6 @@ public class Program {
     private static String mpwd = "Not specified.";
     private static String shost = "Not specified.";
     private static String spwd = "Not specified.";
-    private static final String greenColor = "\u001B[32m";
-    private static final String resetColor = "\u001B[0m";
-    private static final String redColor = "\u001B[91m";
-    private static final String yellowColor = "\u001B[93m";
 
     /**
      * The main entry point of the program.
@@ -116,72 +94,13 @@ public class Program {
 
             case "*":
                 // Display all JVM information
-                displayAllJVMInfo();
-                ConsoleUI.handleConfirmOrInvalidInput("");
-                break;
-
-            case "java_home":
-                // Display Java installation path
-                displayJavaHomeInfo();
-                ConsoleUI.handleConfirmOrInvalidInput("");
-                break;
-
-            case "time":
-                // Display information about local machine's time and JVM time
-                displayLocalDateTime();
-                ConsoleUI.handleConfirmOrInvalidInput("");
-                break;
-
-            case "memorymxbean":
-                // Display information about memory usage, pools, and garbage collection
-                displayMemoryInfo();
-                ConsoleUI.handleConfirmOrInvalidInput("");
-                break;
-
-            case "operatingsystemmxbean":
-                // Display information about operating system monitoring and management
-                displayOperatingSystemInfo();
-                ConsoleUI.handleConfirmOrInvalidInput("");
-                break;
-
-            case "availableprocessors":
-                // Display information about available processors
-                displayAvailableProcessorsInfo();
-                ConsoleUI.handleConfirmOrInvalidInput("");
-                break;
-
-            case "threadmxbean":
-                // Display information about thread activity
-                displayThreadInfo();
-                ConsoleUI.handleConfirmOrInvalidInput("");
-                break;
-
-            case "compilationmxbean":
-                // Display information about the compilation process
-                displayCompilationInfo();
-                ConsoleUI.handleConfirmOrInvalidInput("");
-                break;
-
-            case "garbagecollectormxbean":
-                // Display information about garbage collection process
-                displayGarbageCollectorInfo();
-                ConsoleUI.handleConfirmOrInvalidInput("");
-                break;
-
-            case "classloadingmxbean":
-                // Display information about class loading
-                displayClassLoadingInfo();
+                getJvmInfo();
                 ConsoleUI.handleConfirmOrInvalidInput("");
                 break;
 
             case "socket":
                 // Establish bidirectional TCP communication channel
                 socket();
-                break;
-
-            case "smb":
-                // Establish SMB connection with a file server
-                smbProtocol();
                 break;
 
             case "mail":
@@ -202,11 +121,6 @@ public class Program {
             case "mysql":
                 // Establish connection with MySQL database
                 databaseMY();
-                break;
-
-            case "input":
-                // Read text file and load global variables
-                readTextFile();
                 break;
 
             case "smbrw":
@@ -239,9 +153,15 @@ public class Program {
         String input;
         do {
             ConsoleUI.listVar(6);
-            input = Input.input(true, false, "[" + redColor + "SMTP Protocol" + resetColor + "] > ");
+            input = Input.input(true, false, "[" + ColorUI.ANSI_RED + "SMTP Protocol" + ColorUI.ANSI_RESET + "] > ");
             Input.command(input, 6);
         } while (!"exit".equalsIgnoreCase(input));
+    }
+
+    private static void getJvmInfo() throws IOException {
+        // Display all JVM information
+        JvmMonitoringClient jvm = new JvmMonitoringClient();
+        jvm.displayAllJVMInfo();
     }
 
     /**
@@ -255,7 +175,7 @@ public class Program {
         String input;
         do {
             ConsoleUI.listVar(4);
-            input = Input.input(true, false, "[" + redColor + "Socket" + resetColor + "] > ");
+            input = Input.input(true, false, "[" + ColorUI.ANSI_RED + "Socket" + ColorUI.ANSI_RESET + "] > ");
             Input.command(input, 4);
         } while (!"exit".equalsIgnoreCase(input));
     }
@@ -271,7 +191,7 @@ public class Program {
         String input;
         do {
             ConsoleUI.listVar(5);
-            input = Input.input(true, false, "[" + redColor + "SMB Protocol" + resetColor + "] > ");
+            input = Input.input(true, false, "[" + ColorUI.ANSI_RED + "SMB Protocol" + ColorUI.ANSI_RESET + "] > ");
             Input.command(input, 5);
         } while (!"exit".equalsIgnoreCase(input));
     }
@@ -283,11 +203,11 @@ public class Program {
      * @throws IOException If an I/O error occurs.
      */
     private static void databaseORA() throws IOException {
-        ModuleUI.displayModuleInfo(7);        
+        ModuleUI.displayModuleInfo(7);
         String input;
         do {
             ConsoleUI.listVar(7);
-            input = Input.input(true, false, "[" + redColor + "Oracle Net Protocol" + resetColor + "] > ");
+            input = Input.input(true, false, "[" + ColorUI.ANSI_RED + "Oracle Net Protocol" + ColorUI.ANSI_RESET + "] > ");
             Input.command(input, 7);
         } while (!"exit".equalsIgnoreCase(input));
     }
@@ -299,11 +219,11 @@ public class Program {
      * @throws IOException If an I/O error occurs.
      */
     private static void databaseMS() throws IOException {
-        ModuleUI.displayModuleInfo(8);       
+        ModuleUI.displayModuleInfo(8);
         String input;
         do {
             ConsoleUI.listVar(8);
-            input = Input.input(true, false, "[" + redColor + "Tabular Data Stream" + resetColor + "] > ");
+            input = Input.input(true, false, "[" + ColorUI.ANSI_RED + "Tabular Data Stream" + ColorUI.ANSI_RESET + "] > ");
             Input.command(input, 8);
         } while (!"exit".equalsIgnoreCase(input));
     }
@@ -318,11 +238,11 @@ public class Program {
      * @throws IOException If an I/O error occurs.
      */
     private static void smbRW() throws IOException {
-        ModuleUI.displayModuleInfo(10);   
+        ModuleUI.displayModuleInfo(10);
         String input;
         do {
             ConsoleUI.listVar(10);
-            input = Input.input(true, false, "[" + redColor + "Smb Protocol" + resetColor + "] > ");
+            input = Input.input(true, false, "[" + ColorUI.ANSI_RED + "Smb Protocol" + ColorUI.ANSI_RESET + "] > ");
             Input.command(input, 10);
         } while (!"exit".equalsIgnoreCase(input));
     }
@@ -338,7 +258,7 @@ public class Program {
         String input;
         do {
             ConsoleUI.listVar(9);
-            input = Input.input(true, false, "[" + redColor + "MySQL Protocol (TCP\\IP): " + resetColor + "] > ");
+            input = Input.input(true, false, "[" + ColorUI.ANSI_RED + "MySQL Protocol (TCP\\IP): " + ColorUI.ANSI_RESET + "] > ");
             Input.command(input, 9);
         } while (!"exit".equalsIgnoreCase(input));
     }
@@ -358,39 +278,39 @@ public class Program {
                     switch (module) {
                         case 5:
                         case 10:
-                            shost = Input.input(true, false, "[Set " + greenColor + "host" + resetColor + " (SMB)] > ");
+                            setShost(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "host" + ColorUI.ANSI_RESET + " (SMB)] > "));
                             break;
                         case 6:
-                            mhost = Input.input(true, false, "[Set " + greenColor + "host" + resetColor + " (mail)] > ");
+                            setMhost(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "host" + ColorUI.ANSI_RESET + " (mail)] > "));
                             break;
                         default:
-                            host = Input.input(true, false, "[Set " + greenColor + "host" + resetColor + "] > ");
+                            setHost(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "host" + ColorUI.ANSI_RESET + "] > "));
                             break;
                     }
                 } else {
-                    host = "Not specified.";
+                    setHost("Not specified.");
                 }
                 break;
 
             case "port":
                 if (set) {
-                    port = Input.input(true, true, "[Set " + greenColor + "port" + resetColor + "] > ");
-                    if ("".equals(port)) {
+                    setPort(Input.input(true, true, "[Set " + ColorUI.ANSI_GREEN + "port" + ColorUI.ANSI_RESET + "] > "));
+                    if ("".equals(getPort())) {
                         ConsoleUI.handleConfirmOrInvalidInput("Invalid value for this module parameter.");
                     }
                 } else {
-                    port = "Not specified.";
+                    setPort("Not specified.");
                 }
                 break;
 
             case "qtdm":
                 if (set) {
-                    qtdm = Input.input(true, true, "[Set " + greenColor + "qtdm" + resetColor + "] > ");
-                    if ("".equals(qtdm)) {
+                    setQtdm(Input.input(true, true, "[Set " + ColorUI.ANSI_GREEN + "qtdm" + ColorUI.ANSI_RESET + "] > "));
+                    if ("".equals(getQtdm())) {
                         ConsoleUI.handleConfirmOrInvalidInput("Invalid value for this module parameter.");
                     }
                 } else {
-                    qtdm = "Not specified.";
+                    setQtdm("Not specified.");
                 }
                 break;
 
@@ -400,98 +320,98 @@ public class Program {
 
             case "rem":
                 if (set) {
-                    rem = Input.input(true, false, "[Set " + greenColor + "rem" + resetColor + "] > ");
-                    des = rem;
+                    setRem(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "rem" + ColorUI.ANSI_RESET + "] > "));
+                    setDes(getRem());
                     break;
                 } else {
-                    rem = "Not specified.";
+                    setRem("Not specified.");
                 }
 
             case "des":
                 if (set) {
-                    des = Input.input(true, false, "[Set " + greenColor + "des" + resetColor + "] > ");
+                    setDes(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "des" + ColorUI.ANSI_RESET + "] > "));
                     break;
                 } else {
-                    des = "Not specified.";
+                    setDes("Not specified.");
                 }
 
             case "pwd":
                 if (set) {
                     if (module == 5 || module == 10) {
-                        spwd = Input.updatePassword(module);
+                        setSpwd(Input.updatePassword(module));
                     } else if (module == 6) {
-                        mpwd = Input.updatePassword(module);
+                        setMpwd(Input.updatePassword(module));
                     } else if (module == 7 || module == 8 || module == 9) {
-                        pwd = Input.updatePassword(module);
+                        setPwd(Input.updatePassword(module));
                     } else {
-                        pwd = "Not specified.";
+                        setPwd("Not specified.");
                     }
                 } else {
-                    pwd = "Not specified.";
+                    setPwd("Not specified.");
                 }
                 break;
 
             case "url":
                 if (set) {
-                    url = Input.input(true, false, "[Set " + greenColor + "url" + resetColor + "] > ");
+                    setUrl(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "url" + ColorUI.ANSI_RESET + "] > "));
                     break;
                 } else {
-                    url = "Not specified.";
+                    setUrl("Not specified.");
                 }
 
             case "usr":
                 if (set) {
-                    usr = Input.input(true, false, "[Set " + greenColor + "usr" + resetColor + "] > ");
+                    setUsr(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "usr" + ColorUI.ANSI_RESET + "] > "));
                     break;
                 } else {
-                    usr = "Not specified.";
+                    setUsr("Not specified.");
                 }
 
             case "stls":
                 if (set) {
-                    stls = Input.input(true, false, "[Set " + greenColor + "stls (Y\\N)" + resetColor + "] > ");
-                    if (!"y".equals(stls.toLowerCase()) && !"n".equals(stls.toLowerCase())) {
-                        stls = "Not specified.";
+                    setStls(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "stls (Y\\N)" + ColorUI.ANSI_RESET + "] > "));
+                    if (!"y".equals(getStls().toLowerCase()) && !"n".equals(getStls().toLowerCase())) {
+                        setStls("Not specified.");
                         ConsoleUI.handleConfirmOrInvalidInput("Invalid value for this module parameter.");
                     }
                 } else {
-                    stls = "Not specified.";
+                    setStls("Not specified.");
                 }
                 break;
 
             case "aut":
                 if (set) {
-                    aut = Input.input(true, false, "[Set " + greenColor + "aut (Y\\N)" + resetColor + "] > ");
-                    if (!"y".equals(aut.toLowerCase()) && !"n".equals(aut.toLowerCase())) {
-                        aut = "Not specified.";
+                    setAut(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "aut (Y\\N)" + ColorUI.ANSI_RESET + "] > "));
+                    if (!"y".equals(getAut().toLowerCase()) && !"n".equals(getAut().toLowerCase())) {
+                        setAut("Not specified.");
                         ConsoleUI.handleConfirmOrInvalidInput("Invalid value for this module parameter.");
                     }
                 } else {
-                    aut = "Not specified.";
+                    setAut("Not specified.");
                 }
                 break;
 
             case "tmsg":
                 if (set) {
-                    tmsg = Input.input(true, false, "[Set " + greenColor + "tmsg" + resetColor + "] > ");
+                    setTmsg(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "tmsg" + ColorUI.ANSI_RESET + "] > "));
                 } else {
-                    tmsg = "Not specified.";
+                    setTmsg("Not specified.");
                 }
                 break;
 
             case "pmsg":
                 if (set) {
-                    pmsg = Input.input(true, false, "[Set " + greenColor + "pmsg" + resetColor + "] > ");
+                    setPmsg(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "pmsg" + ColorUI.ANSI_RESET + "] > "));
                 } else {
-                    pmsg = "Not specified.";
+                    setPmsg("Not specified.");
                 }
                 break;
 
             case "dmn":
                 if (set) {
-                    dmn = Input.input(true, false, "[Set " + greenColor + "dmn" + resetColor + "] > ");
+                    setDmn(Input.input(true, false, "[Set " + ColorUI.ANSI_GREEN + "dmn" + ColorUI.ANSI_RESET + "] > "));
                 } else {
-                    dmn = "Not specified.";
+                    setDmn("Not specified.");
                 }
                 break;
 
@@ -511,10 +431,10 @@ public class Program {
      */
     private static void updateProtocol(boolean set) {
         if (set) {
-            String inputProtocol = Input.input(true, false, "[set " + greenColor + "prot" + resetColor + "] > ");
-            prot = Input.validateProtocol(inputProtocol);
+            String inputProtocol = Input.input(true, false, "[set " + ColorUI.ANSI_GREEN + "prot" + ColorUI.ANSI_RESET + "] > ");
+            setProt(Input.validateProtocol(inputProtocol));
         } else {
-            prot = "Not specified.";
+            setProt("Not specified.");
         }
     }
 
@@ -530,33 +450,33 @@ public class Program {
 
             case 4:
                 // Socket Module
-                if (!"Not specified.".equals(host) && !"Not specified.".equals(port)) {
+                if (!"Not specified.".equals(getHost()) && !"Not specified.".equals(getPort())) {
                     SocketClient socket = new SocketClient();
-                    ConsoleUI.startModule("             " + redColor + "java.net", "socket" + resetColor + "              ");
-                    socket.socketM(host, Integer.parseInt(port));
+                    ConsoleUI.startModule("             " + ColorUI.ANSI_RED + "java.net", "socket" + ColorUI.ANSI_RESET + "              ");
+                    socket.PerformServerConnection(getHost(), getPort(), getAut(), getStls(), getProt(), getRem(), getDes(), getPwd(), getUrl(), getUsr(), getTmsg(), getPmsg(), getQtdm(), getDmn(), getMhost(), getMpwd(), getShost(), getSpwd());
                 } else {
                     ConsoleUI.handleConfirmOrInvalidInput("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                 }
                 break;
             case 5:
                 // SMB Module
-                if (!"Not specified.".equals(usr) && !"Not specified.".equals(spwd) && !"Not specified.".equals(shost)) {
-                    SmbClient smb = new SmbClient();
-                    ConsoleUI.startModule("                " + redColor + "jcifs", "smb" + resetColor + "                 ");
-                    if (!shost.contains("\\\\")) {
-                        shost = "\\\\" + shost;
+                if (!"Not specified.".equals(usr) && !"Not specified.".equals(getSpwd()) && !"Not specified.".equals(getShost())) {
+                    SmbClientRW smb = new SmbClientRW();
+                    ConsoleUI.startModule("                " + ColorUI.ANSI_RED + "jcifs", "smb" + ColorUI.ANSI_RESET + "                 ");
+                    if (!getShost().contains("\\\\")) {
+                        setShost("\\\\" + getShost());
                     }
-                    smb.smb(usr, spwd, shost);
+                    smb.smb(getUsr(), getSpwd(), getShost());
                 } else {
                     ConsoleUI.handleConfirmOrInvalidInput("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                 }
                 break;
             case 6:
                 // SMTP Module
-                if (!"Not specified.".equals(mhost) && !"Not specified.".equals(port) && !"Not specified.".equals(prot) && !"Not specified.".equals(prot) && !"Not specified.".equals(rem) && !"Not specified.".equals(des) && !"Not specified.".equals(mpwd)) {
+                if (!"Not specified.".equals(getMhost()) && !"Not specified.".equals(getPort()) && !"Not specified.".equals(getProt()) && !"Not specified.".equals(getProt()) && !"Not specified.".equals(getRem()) && !"Not specified.".equals(getDes()) && !"Not specified.".equals(getMpwd())) {
                     SmtpClient smtp = new SmtpClient();
-                    ConsoleUI.startModule("                 " + redColor + "javax", "mail" + resetColor + "               ");
-                    smtp.smtpH(mhost, port, prot, rem, des, mpwd, stls, aut, tmsg, pmsg, qtdm);
+                    ConsoleUI.startModule("                 " + ColorUI.ANSI_RED + "javax", "mail" + ColorUI.ANSI_RESET + "               ");
+                    smtp.PerformServerConnection(getHost(), getPort(), getAut(), getStls(), getProt(), getRem(), getDes(), getPwd(), getUrl(), getUsr(), getTmsg(), getPmsg(), getQtdm(), getDmn(), getMhost(), getMpwd(), getShost(), getSpwd());
 
                 } else {
                     ConsoleUI.handleConfirmOrInvalidInput("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
@@ -564,260 +484,45 @@ public class Program {
                 break;
             case 7:
                 // Oracle DB Module
-                if (!"Not specified.".equals(url) && !"Not specified.".equals(usr) && !"Not specified.".equals(pwd)) {
+                if (!"Not specified.".equals(getUrl()) && !"Not specified.".equals(getUsr()) && !"Not specified.".equals(getPwd())) {
                     OracleClient db = new OracleClient();
-                    ConsoleUI.startModule("      " + redColor + "jdbc.driver.OracleDriver ", "oracle" + resetColor + "    ");
-                    db.databaseM(url, usr, pwd);
+                    ConsoleUI.startModule("      " + ColorUI.ANSI_RED + "jdbc.driver.OracleDriver ", "oracle" + ColorUI.ANSI_RESET + "    ");
+                    db.PerformServerConnection(getHost(), getPort(), getAut(), getStls(), getProt(), getRem(), getDes(), getPwd(), getUrl(), getUsr(), getTmsg(), getPmsg(), getQtdm(), getDmn(), getMhost(), getMpwd(), getShost(), getSpwd());
                 } else {
                     ConsoleUI.handleConfirmOrInvalidInput("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                 }
                 break;
             // Microsoft DB Module
             case 8:
-                if (!"Not specified.".equals(url) && !"Not specified.".equals(usr) && !"Not specified.".equals(pwd)) {
+                if (!"Not specified.".equals(getUrl()) && !"Not specified.".equals(getUsr()) && !"Not specified.".equals(getPwd())) {
                     SqlServerClient db = new SqlServerClient();
-                    ConsoleUI.startModule("       " + redColor + "jdbc.SQLServerDriver", "mserver" + resetColor + "       ");
-                    db.databaseM(url, usr, pwd);
+                    ConsoleUI.startModule("       " + ColorUI.ANSI_RED + "jdbc.SQLServerDriver", "mserver" + ColorUI.ANSI_RESET + "       ");
+                    db.PerformServerConnection(getHost(), getPort(), getAut(), getStls(), getProt(), getRem(), getDes(), getPwd(), getUrl(), getUsr(), getTmsg(), getPmsg(), getQtdm(), getDmn(), getMhost(), getMpwd(), getShost(), getSpwd());
                 } else {
                     ConsoleUI.handleConfirmOrInvalidInput("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                 }
                 break;
             case 9:
                 // MySQL DB Module
-                if (!"Not specified.".equals(url) && !"Not specified.".equals(usr) && !"Not specified.".equals(pwd)) {
+                if (!"Not specified.".equals(getUrl()) && !"Not specified.".equals(getUsr()) && !"Not specified.".equals(getPwd())) {
                     MySqlClient db = new MySqlClient();
-                    ConsoleUI.startModule("        " + redColor + "mysql.cj.jdbc.Driver", "mysql" + resetColor + "        ");
-                    db.databaseM(url, usr, pwd);
+                    ConsoleUI.startModule("        " + ColorUI.ANSI_RED + "mysql.cj.jdbc.Driver", "mysql" + ColorUI.ANSI_RESET + "        ");
+                    db.PerformServerConnection(getHost(), getPort(), getAut(), getStls(), getProt(), getRem(), getDes(), getPwd(), getUrl(), getUsr(), getTmsg(), getPmsg(), getQtdm(), getDmn(), getMhost(), getMpwd(), getShost(), getSpwd());
                 } else {
                     ConsoleUI.handleConfirmOrInvalidInput("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                 }
                 break;
             case 10:
                 // SMB Read-Write Module
-                if (!"Not specified.".equals(usr) && !"Not specified.".equals(spwd) && !"Not specified.".equals(shost) && !"Not specified.".equals(dmn)) {
-                    SmbClient smb = new SmbClient();
-                    ConsoleUI.startModule("                " + redColor + "jcifs", "smbRW" + resetColor + "               ");
-                    smb.smbRW(usr, spwd, shost, dmn);
+                if (!"Not specified.".equals(getUsr()) && !"Not specified.".equals(getSpwd()) && !"Not specified.".equals(getShost()) && !"Not specified.".equals(getDmn())) {
+                    SmbClientRW smb = new SmbClientRW();
+                    ConsoleUI.startModule("                " + ColorUI.ANSI_RED + "jcifs", "smbRW" + ColorUI.ANSI_RESET + "               ");
+                    smb.PerformServerConnection(getHost(), getPort(), getAut(), getStls(), getProt(), getRem(), getDes(), getPwd(), getUrl(), getUsr(), getTmsg(), getPmsg(), getQtdm(), getDmn(), getMhost(), getMpwd(), getShost(), getSpwd());
                 } else {
                     ConsoleUI.handleConfirmOrInvalidInput("Required to provide all mandatory parameters (*) to run this module. Press [Enter] to continue:");
                 }
                 break;
         }
-    }
-    /*
-     * Displays information about class loading in the JVM.
-     *
-     * @throws IOException If an I/O error occurs.
-     */
-    
-    private static void displayClassLoadingInfo() throws IOException {
-        ClassLoadingMXBean classLoadingMXBean = ManagementFactory.getClassLoadingMXBean();
-        System.out.println(yellowColor + "Class Loading:" + resetColor);
-        System.out.println(greenColor + "  Total loaded classes: " + classLoadingMXBean.getTotalLoadedClassCount());
-        System.out.println(greenColor + "  Total unloaded classes: " + classLoadingMXBean.getUnloadedClassCount());
-    }
-
-    /**
-     * Displays information about garbage collection in the JVM.
-     *
-     * @throws IOException If an I/O error occurs.
-     */
-    private static void displayGarbageCollectorInfo() throws IOException {
-        GarbageCollectorMXBean garbageCollectorMXBean = ManagementFactory.getGarbageCollectorMXBeans().get(0);
-        System.out.println(yellowColor + "Garbage Collection:" + resetColor);
-        System.out.println(greenColor + "  Collector name: " + garbageCollectorMXBean.getName());
-        System.out.println(greenColor + "  Number of collections: " + garbageCollectorMXBean.getCollectionCount());
-        System.out.println(greenColor + "  Collection time (ms): " + garbageCollectorMXBean.getCollectionTime());
-    }
-
-    /**
-     * Displays information about JVM compilation.
-     *
-     * @throws IOException If an I/O error occurs.
-     */
-    private static void displayCompilationInfo() throws IOException {
-        CompilationMXBean compilationMXBean = ManagementFactory.getCompilationMXBean();
-        System.out.println(yellowColor + "Compilation:" + resetColor);
-        System.out.println(greenColor + "  Compiler name: " + compilationMXBean.getName());
-    }
-
-    /**
-     * Displays information about threads in the JVM.
-     *
-     * @throws IOException If an I/O error occurs.
-     */
-    private static void displayThreadInfo() throws IOException {
-        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        System.out.println(yellowColor + "Threads:" + resetColor);
-        System.out.println(greenColor + "  Number of active threads: " + threadMXBean.getThreadCount());
-        System.out.println(greenColor + "  Peak threads: " + threadMXBean.getPeakThreadCount());
-    }
-
-    /**
-     * Displays information about the available processors in the JVM runtime.
-     *
-     * @throws IOException If an I/O error occurs.
-     */
-    private static void displayAvailableProcessorsInfo() throws IOException {
-        Runtime runtime = Runtime.getRuntime();
-        System.out.println(yellowColor + "Runtime:" + resetColor);
-        System.out.println(greenColor + "  Available processors: " + runtime.availableProcessors());
-    }
-
-    /**
-     * Displays information about the operating system in the JVM.
-     *
-     * @throws IOException If an I/O error occurs.
-     */
-    private static void displayOperatingSystemInfo() throws IOException {
-        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
-        System.out.println(yellowColor + "Operating System:" + resetColor);
-        System.out.println(greenColor + "  OS name: " + operatingSystemMXBean.getName());
-        System.out.println(greenColor + "  OS version: " + operatingSystemMXBean.getVersion());
-    }
-
-    /**
-     * Displays information about JVM memory usage.
-     */
-    private static void displayMemoryInfo() {
-        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
-        System.out.println(yellowColor + "JVM Memory:" + resetColor);
-        System.out.println(greenColor + "  Heap Memory Usage: " + memoryMXBean.getHeapMemoryUsage());
-    }
-
-    /**
-     * Displays the current local date and time in the JVM.
-     */
-    private static void displayLocalDateTime() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        String formattedDateTime = now.format(formatter);
-        System.out.println(yellowColor + "Local date and time (JVM): " + resetColor + formattedDateTime);
-        Sys.displayTime();
-    }
-
-    /**
-     * Displays comprehensive information about the JVM.
-     *
-     * @throws IOException If an I/O error occurs.
-     */
-    private static void displayAllJVMInfo() throws IOException {
-        System.out.println(redColor + "JVM Information:" + resetColor);
-        displayClassLoadingInfo();
-        displayGarbageCollectorInfo();
-        displayCompilationInfo();
-        displayThreadInfo();
-        displayAvailableProcessorsInfo();
-        displayOperatingSystemInfo();
-        displayMemoryInfo();
-        displayLocalDateTime();
-        displayJavaHomeInfo();
-        displayJvmOptInfo();
-    }
-
-    /**
-     * Displays information about the Java home directory in the JVM.
-     */
-    private static void displayJavaHomeInfo() {
-        System.out.println(yellowColor + "Java Home Directory: " + resetColor + System.getProperty("java.home"));
-    }
-
-    /**
-     * Displays information about JVM options.
-     */
-    private static void displayJvmOptInfo() {
-        System.out.println(yellowColor + "JVM Options: " + resetColor + ManagementFactory.getRuntimeMXBean().getInputArguments());
-    }
-
-    /**
-     * Reads configuration information from the 'input.nta' file and initializes
-     * relevant variables. Displays the key-value pairs of the configuration for
-     * verification.
-     *
-     * @throws IOException If an error occurs while reading the file.
-     */
-    private static void readTextFile() throws IOException {
-        Map<String, String> configMap = readConfigFile();
-
-        if (configMap != null) {
-            initializeVariables(configMap);
-            displayConfigurations(configMap);
-        } else {
-            System.out.println("Could not read the file 'input.nta'.");
-        }
-    }
-
-    /**
-     * Initializes relevant variables with values from the configuration map.
-     *
-     * @param configMap The map containing key-value pairs from the
-     * configuration file.
-     */
-    private static void initializeVariables(Map<String, String> configMap) {
-        host = configMap.get("host");
-        port = configMap.get("port");
-        aut = configMap.get("aut");
-        stls = configMap.get("stls");
-        prot = configMap.get("prot");
-        rem = configMap.get("rem");
-        des = configMap.get("des");
-        pwd = configMap.get("pwd");
-        url = configMap.get("url");
-        usr = configMap.get("usr");
-        tmsg = configMap.get("tmsg");
-        pmsg = configMap.get("pmsg");
-        qtdm = configMap.get("qtdm");
-        dmn = configMap.get("dmn");
-        mhost = configMap.get("mhost");
-        mpwd = configMap.get("mpwd");
-        shost = configMap.get("shost");
-        spwd = configMap.get("spwd");
-    }
-
-    /**
-     * Displays the key-value pairs of the configuration for verification.
-     *
-     * @param configMap The map containing key-value pairs from the
-     * configuration file.
-     */
-    private static void displayConfigurations(Map<String, String> configMap) {
-        for (Map.Entry<String, String> entry : configMap.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-    }
-
-    /**
-     * Reads configuration information from the 'input.nta' file and returns a
-     * map of key-value pairs.
-     *
-     * @return A map containing key-value pairs from the configuration file or
-     * null if an error occurs.
-     */
-    private static Map<String, String> readConfigFile() {
-        Map<String, String> configMap = new HashMap<>();
-
-        try {
-            Path jarPath = Paths.get(Program.class
-                    .getProtectionDomain().getCodeSource().getLocation().toURI());
-            String txtFolderPath = jarPath.getParent().resolve("txt").toString();
-            String configFilePath = txtFolderPath + File.separator + "input.nta";
-
-            // Read all lines from the file and process them using Stream API
-            try (Stream<String> lines = Files.lines(Paths.get(configFilePath), StandardCharsets.UTF_8)) {
-                lines.map(String::trim)
-                        .filter(line -> line.contains(":"))
-                        .map(line -> line.split(":", 2))
-                        .filter(parts -> parts.length == 2)
-                        .forEach(parts -> configMap.put(parts[0].trim(), parts[1].trim()));
-            }
-
-        } catch (URISyntaxException | IOException e) {
-            System.err.println("Error reading configuration file: " + e.getMessage());
-            return null;
-        }
-
-        return configMap;
-
     }
 
     /**
@@ -829,105 +534,85 @@ public class Program {
      * to indicate this.
      */
     private static void xml() {
-        try {
-            // Get the JAR file path and construct the XML folder path
-            Path jarPath = Paths.get(Program.class
-                    .getProtectionDomain().getCodeSource().getLocation().toURI());
-            String xmlFolderPath = jarPath.getParent().resolve("xml").toString();
 
-            // Create File objects for the XML directory and the files inside it
-            File directoryFiles = new File(xmlFolderPath);
-            File[] files = directoryFiles.listFiles();
+        NodeList nodeList = XMLReader.readXML("Param.");
 
-            // Check if there are XML files in the directory
-            if (files != null && files.length
-                    > 0) {
-                // Process the first XML file in the directory
-                File xmlFile = files[0];
-                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                Document doc = dBuilder.parse(xmlFile);
-                doc.getDocumentElement().normalize();
-
-                // Extract information from XML nodes and update global variables
-                NodeList nodeList = doc.getElementsByTagName("Param.");
-                for (int i = 0; i < nodeList.getLength(); i++) {
-                    Node node = nodeList.item(i);
-                    if (node.getNodeType() == Node.ELEMENT_NODE) {
-                        Element element = (Element) node;
-                        String seq = element.getAttribute("Seq").replaceAll("\"", "");
-                        if (seq.equals("185")) {
-                            String user = element.getAttribute("Usuário").replaceAll("\"", "");
-                            System.out.println("User Value [185] Authentication for network access: " + yellowColor + user + resetColor + " Assigned to smb " + greenColor + "host" + resetColor + ".\n");
-                            String entry = user.replaceAll("\\s+", "");
-                            if (entry.indexOf(';') != -1 && entry.contains(";") && entry.contains(":")) {
-                                try {
-                                    dmn = entry.substring(0, entry.indexOf(';'));
-                                    usr = entry.substring(entry.indexOf(';') + 1, entry.indexOf(":", entry.indexOf(';')));
-                                    spwd = entry.substring(entry.indexOf(":") + 1);
-                                } catch (StringIndexOutOfBoundsException ex) {
-                                }
+        if (nodeList != null) {
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    String seq = element.getAttribute("Seq").replaceAll("\"", "");
+                    if (seq.equals("185")) {
+                        String user = element.getAttribute("Usuário").replaceAll("\"", "");
+                        System.out.println("User Value [185] Authentication for network access: " + ColorUI.ANSI_YELLOW + user + ColorUI.ANSI_RESET + " Assigned to smb " + ColorUI.ANSI_GREEN + "host" + ColorUI.ANSI_RESET + ".\n");
+                        String entry = user.replaceAll("\\s+", "");
+                        if (entry.indexOf(';') != -1 && entry.contains(";") && entry.contains(":")) {
+                            try {
+                                setDmn(entry.substring(0, entry.indexOf(';')));
+                                setUsr(entry.substring(entry.indexOf(';') + 1, entry.indexOf(":", entry.indexOf(';'))));
+                                setSpwd(entry.substring(entry.indexOf(":") + 1));
+                            } catch (StringIndexOutOfBoundsException ex) {
+                                ex.printStackTrace();
                             }
-                        }
-                        if (seq.equals("20")) {
-                            String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
-                            System.out.println("\nUser Value [20] Name of the server for sent messages: " + yellowColor + usuario + resetColor + " Assigned to " + greenColor + "mhost" + resetColor + ".");
-                            mhost = usuario;
-                        }
-                        if (seq.equals("109")) {
-                            String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
-                            System.out.println("User Value [109] Enter the port to be used for email sending: " + yellowColor + usuario + resetColor + " Assigned to " + greenColor + "port" + resetColor + ".");
-                            port = usuario;
-                        }
-                        if (seq.equals("38")) {
-                            String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
-                            System.out.println("User Value [38] Name of the USERID for the Email server: " + yellowColor + usuario + resetColor + " Assigned to " + greenColor + "rem" + resetColor + ".");
-                            rem = usuario;
-                            des = usuario;
-                        }
-                        if (seq.equals("40")) {
-                            String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
-                            System.out.println("User Value [40] Password for SMTP email authentication: " + yellowColor + usuario + resetColor + " Assigned to " + greenColor + "mpwd" + resetColor + ".");
-                            mpwd = usuario;
-                        }
-                        if (seq.equals("96")) {
-                            String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
-                            if (usuario.toLowerCase().equals("s")) {
-                                aut = "y (default)";
-                            } else {
-                                aut = "n";
-                            }
-                            System.out.println("User Value [96] Use authentication for email sending: " + yellowColor + usuario + resetColor + " Assigned to " + greenColor + "aut" + resetColor + ".");
-                        }
-                        if (seq.equals("110")) {
-                            String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
-                            if (usuario.toLowerCase().equals("s")) {
-                                stls = "y (default)";
-                            } else {
-                                stls = "n";
-                            }
-                            System.out.println("User Value [110] Use email sending via SSL protocol: " + yellowColor + usuario + resetColor + " Assigned to " + greenColor + "stls" + resetColor + ".");
-                        }
-                        if (seq.equals("125")) {
-                            String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
-                            if (usuario.toLowerCase().equals("")) {
-                                prot = "Not specified.";
-                            } else if (usuario.toLowerCase().equals("0")) {
-                                prot = "SSLv3.0";
-                            } else if (usuario.toLowerCase().equals("2")) {
-                                prot = "TLSv1.0";
-                            } else if (usuario.toLowerCase().equals("4")) {
-                                prot = "TLSv1.2";
-                            }
-                            System.out.println("User Value [125] Use email sending via SSL protocol: " + yellowColor + usuario + resetColor + " Assigned to " + greenColor + "prot" + resetColor + ".");
                         }
                     }
+                    if (seq.equals("20")) {
+                        String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
+                        System.out.println("\nUser Value [20] Name of the server for sent messages: " + ColorUI.ANSI_YELLOW + usuario + ColorUI.ANSI_RESET + " Assigned to " + ColorUI.ANSI_GREEN + "getMhost()" + ColorUI.ANSI_RESET + ".");
+                        setMhost(usuario);
+                    }
+                    if (seq.equals("109")) {
+                        String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
+                        System.out.println("User Value [109] Enter the port to be used for email sending: " + ColorUI.ANSI_YELLOW + usuario + ColorUI.ANSI_RESET + " Assigned to " + ColorUI.ANSI_GREEN + "port" + ColorUI.ANSI_RESET + ".");
+                        setPort(usuario);
+                    }
+                    if (seq.equals("38")) {
+                        String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
+                        System.out.println("User Value [38] Name of the USERID for the Email server: " + ColorUI.ANSI_YELLOW + usuario + ColorUI.ANSI_RESET + " Assigned to " + ColorUI.ANSI_GREEN + "rem" + ColorUI.ANSI_RESET + ".");
+                        setRem(usuario);
+                        setDes(usuario);
+                    }
+                    if (seq.equals("40")) {
+                        String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
+                        System.out.println("User Value [40] Password for SMTP email authentication: " + ColorUI.ANSI_YELLOW + usuario + ColorUI.ANSI_RESET + " Assigned to " + ColorUI.ANSI_GREEN + "mpwd" + ColorUI.ANSI_RESET + ".");
+                        setMpwd(usuario);
+                    }
+                    if (seq.equals("96")) {
+                        String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
+                        if (usuario.toLowerCase().equals("s")) {
+                            setAut("y (default)");
+                        } else {
+                            setAut("n");
+                        }
+                        System.out.println("User Value [96] Use authentication for email sending: " + ColorUI.ANSI_YELLOW + usuario + ColorUI.ANSI_RESET + " Assigned to " + ColorUI.ANSI_GREEN + "aut" + ColorUI.ANSI_RESET + ".");
+                    }
+                    if (seq.equals("110")) {
+                        String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
+                        if (usuario.toLowerCase().equals("s")) {
+                            setStls("y (default)");
+                        } else {
+                            setStls("n");
+                        }
+                        System.out.println("User Value [110] Use email sending via SSL protocol: " + ColorUI.ANSI_YELLOW + usuario + ColorUI.ANSI_RESET + " Assigned to " + ColorUI.ANSI_GREEN + "stls" + ColorUI.ANSI_RESET + ".");
+                    }
+                    if (seq.equals("125")) {
+                        String usuario = element.getAttribute("Usuário").replaceAll("\"", "");
+                        if (usuario.toLowerCase().equals("")) {
+                            setProt("Not specified.");
+                        } else if (usuario.toLowerCase().equals("0")) {
+                            setProt("SSLv3.0");
+                        } else if (usuario.toLowerCase().equals("2")) {
+                            setProt("TLSv1.0");
+                        } else if (usuario.toLowerCase().equals("4")) {
+                            setProt("TLSv1.2");
+                        }
+                        System.out.println("User Value [125] Use email sending via SSL protocol: " + ColorUI.ANSI_YELLOW + usuario + ColorUI.ANSI_RESET + " Assigned to " + ColorUI.ANSI_GREEN + "prot" + ColorUI.ANSI_RESET + ".");
+                    }
                 }
-            } else {
-                System.out.println("No XML files found in the directory.");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            System.out.print("No XML files found in the directory.");
         }
     }
 
@@ -1047,8 +732,8 @@ public class Program {
         return mhost;
     }
 
-    public static void setMhost(String mhost) {
-        Program.mhost = mhost;
+    public static void setMhost(String mHost) {
+        Program.mhost = mHost;
     }
 
     public static String getMpwd() {

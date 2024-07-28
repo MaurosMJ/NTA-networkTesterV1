@@ -1,9 +1,10 @@
 package com.whebsys.nta.model.service.db.sqlserver;
 
+import com.whebsys.nta.application.service.interfaces.Module;
+import com.whebsys.nta.ui.ColorUI;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import org.fusesource.jansi.AnsiConsole;
 
 /**
  * Class for establishing a connection to the Microsoft SQL Server database.
@@ -22,39 +23,31 @@ import org.fusesource.jansi.AnsiConsole;
  *
  * @Author: Mauros Milach Junior (github.com/MaurosMJ)
  */
-public class SqlServerClient {
-
-    private final String resetColor = "\u001B[0m";
-    private final String redColor = "\u001B[91m";
-    private final String greenColor = "\u001B[32m";
+public class SqlServerClient implements Module {
 
     /**
      * Establishes a connection to the Microsoft SQL Server database.
-     *
-     * @param url The URL of the SQL Server database.
-     * @param usr The username for authentication.
-     * @param pwd The password for authentication.
      */
-    public void databaseM(String url, String usr, String pwd) {
+    public void PerformServerConnection(String host, String port, String aut, String stls, String prot, String rem, String des, String pwd, String url, String usr, String tmsg, String pmsg, String qtdm, String dmn, String mhost, String mpwd, String shost, String spwd) {
         try {
             // Load the Microsoft SQL Server JDBC driver
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
             // Establish a connection to the database
             Connection connection = DriverManager.getConnection(url, usr, pwd);
-            System.out.println(greenColor+"Database connection established successfully!"+resetColor);
+            System.out.println(ColorUI.ANSI_GREEN+"Database connection established successfully!"+ColorUI.ANSI_RESET);
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.print(redColor);
+            System.out.print(ColorUI.ANSI_RED);
             handleDatabaseConnectionError(e);
-            System.out.print(resetColor);
+            System.out.print(ColorUI.ANSI_RESET);
         }
     }
 
     private void handleDatabaseConnectionError(Exception e) {
         // Log an error message and print the stack trace
-        System.out.println(redColor+"Unable to connect to the database."+resetColor);
-        System.out.print(redColor);
+        System.out.println(ColorUI.ANSI_RED+"Unable to connect to the database."+ColorUI.ANSI_RESET);
+        System.out.print(ColorUI.ANSI_RED);
         e.printStackTrace();
-        System.out.print(resetColor);
+        System.out.print(ColorUI.ANSI_RESET);
     }
 }

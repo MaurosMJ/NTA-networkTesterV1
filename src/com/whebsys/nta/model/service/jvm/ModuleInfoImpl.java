@@ -5,7 +5,6 @@
  */
 package com.whebsys.nta.model.service.jvm;
 
-import com.whebsys.nta.model.service.smb.*;
 import com.whebsys.nta.application.service.interfaces.*;
 import com.whebsys.utils.DateUtils;
 import java.util.Date;

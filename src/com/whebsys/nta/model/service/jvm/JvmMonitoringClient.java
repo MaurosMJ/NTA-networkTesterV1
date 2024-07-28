@@ -5,6 +5,7 @@
  */
 package com.whebsys.nta.model.service.jvm;
 
+import com.whebsys.nta.ui.ColorUI;
 import com.whebsys.utils.Sys;
 import java.io.IOException;
 import java.lang.management.ClassLoadingMXBean;
@@ -23,21 +24,17 @@ import java.time.format.DateTimeFormatter;
  */
 public class JvmMonitoringClient {
 
-    private static final String greenColor = "\u001B[32m";
-    private static final String resetColor = "\u001B[0m";
-    private static final String redColor = "\u001B[91m";
-    private static final String yellowColor = "\u001B[93m";
 
     /**
      * Displays information about class loading in the JVM.
      *
      * @throws IOException If an I/O error occurs.
      */
-    private static void displayClassLoadingInfo() throws IOException {
+    public void displayClassLoadingInfo() throws IOException {
         ClassLoadingMXBean classLoadingMXBean = ManagementFactory.getClassLoadingMXBean();
-        System.out.println(yellowColor + "Class Loading:" + resetColor);
-        System.out.println(greenColor + "  Total loaded classes: " + classLoadingMXBean.getTotalLoadedClassCount());
-        System.out.println(greenColor + "  Total unloaded classes: " + classLoadingMXBean.getUnloadedClassCount());
+        System.out.println(ColorUI.ANSI_YELLOW + "Class Loading:" + ColorUI.ANSI_RESET);
+        System.out.println(ColorUI.ANSI_GREEN + "  Total loaded classes: " + classLoadingMXBean.getTotalLoadedClassCount());
+        System.out.println(ColorUI.ANSI_GREEN + "  Total unloaded classes: " + classLoadingMXBean.getUnloadedClassCount());
     }
 
     /**
@@ -45,12 +42,12 @@ public class JvmMonitoringClient {
      *
      * @throws IOException If an I/O error occurs.
      */
-    private static void displayGarbageCollectorInfo() throws IOException {
+    public void displayGarbageCollectorInfo() throws IOException {
         GarbageCollectorMXBean garbageCollectorMXBean = ManagementFactory.getGarbageCollectorMXBeans().get(0);
-        System.out.println(yellowColor + "Garbage Collection:" + resetColor);
-        System.out.println(greenColor + "  Collector name: " + garbageCollectorMXBean.getName());
-        System.out.println(greenColor + "  Number of collections: " + garbageCollectorMXBean.getCollectionCount());
-        System.out.println(greenColor + "  Collection time (ms): " + garbageCollectorMXBean.getCollectionTime());
+        System.out.println(ColorUI.ANSI_YELLOW + "Garbage Collection:" + ColorUI.ANSI_RESET);
+        System.out.println(ColorUI.ANSI_GREEN + "  Collector name: " + garbageCollectorMXBean.getName());
+        System.out.println(ColorUI.ANSI_GREEN + "  Number of collections: " + garbageCollectorMXBean.getCollectionCount());
+        System.out.println(ColorUI.ANSI_GREEN + "  Collection time (ms): " + garbageCollectorMXBean.getCollectionTime());
     }
 
     /**
@@ -58,10 +55,10 @@ public class JvmMonitoringClient {
      *
      * @throws IOException If an I/O error occurs.
      */
-    private static void displayCompilationInfo() throws IOException {
+    public void displayCompilationInfo() throws IOException {
         CompilationMXBean compilationMXBean = ManagementFactory.getCompilationMXBean();
-        System.out.println(yellowColor + "Compilation:" + resetColor);
-        System.out.println(greenColor + "  Compiler name: " + compilationMXBean.getName());
+        System.out.println(ColorUI.ANSI_YELLOW + "Compilation:" + ColorUI.ANSI_RESET);
+        System.out.println(ColorUI.ANSI_GREEN + "  Compiler name: " + compilationMXBean.getName());
     }
 
     /**
@@ -69,11 +66,11 @@ public class JvmMonitoringClient {
      *
      * @throws IOException If an I/O error occurs.
      */
-    private static void displayThreadInfo() throws IOException {
+    public void displayThreadInfo() throws IOException {
         ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        System.out.println(yellowColor + "Threads:" + resetColor);
-        System.out.println(greenColor + "  Number of active threads: " + threadMXBean.getThreadCount());
-        System.out.println(greenColor + "  Peak threads: " + threadMXBean.getPeakThreadCount());
+        System.out.println(ColorUI.ANSI_YELLOW + "Threads:" + ColorUI.ANSI_RESET);
+        System.out.println(ColorUI.ANSI_GREEN + "  Number of active threads: " + threadMXBean.getThreadCount());
+        System.out.println(ColorUI.ANSI_GREEN + "  Peak threads: " + threadMXBean.getPeakThreadCount());
     }
 
     /**
@@ -81,10 +78,10 @@ public class JvmMonitoringClient {
      *
      * @throws IOException If an I/O error occurs.
      */
-    private static void displayAvailableProcessorsInfo() throws IOException {
+    public void displayAvailableProcessorsInfo() throws IOException {
         Runtime runtime = Runtime.getRuntime();
-        System.out.println(yellowColor + "Runtime:" + resetColor);
-        System.out.println(greenColor + "  Available processors: " + runtime.availableProcessors());
+        System.out.println(ColorUI.ANSI_YELLOW + "Runtime:" + ColorUI.ANSI_RESET);
+        System.out.println(ColorUI.ANSI_GREEN + "  Available processors: " + runtime.availableProcessors());
     }
 
     /**
@@ -92,30 +89,63 @@ public class JvmMonitoringClient {
      *
      * @throws IOException If an I/O error occurs.
      */
-    private static void displayOperatingSystemInfo() throws IOException {
+    public void displayOperatingSystemInfo() throws IOException {
         OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
-        System.out.println(yellowColor + "Operating System:" + resetColor);
-        System.out.println(greenColor + "  OS name: " + operatingSystemMXBean.getName());
-        System.out.println(greenColor + "  OS version: " + operatingSystemMXBean.getVersion());
+        System.out.println(ColorUI.ANSI_YELLOW + "Operating System:" + ColorUI.ANSI_RESET);
+        System.out.println(ColorUI.ANSI_GREEN + "  OS name: " + operatingSystemMXBean.getName());
+        System.out.println(ColorUI.ANSI_GREEN + "  OS version: " + operatingSystemMXBean.getVersion());
     }
 
     /**
      * Displays information about JVM memory usage.
      */
-    private static void displayMemoryInfo() {
+    public void displayMemoryInfo() {
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
-        System.out.println(yellowColor + "JVM Memory:" + resetColor);
-        System.out.println(greenColor + "  Heap Memory Usage: " + memoryMXBean.getHeapMemoryUsage());
+        System.out.println(ColorUI.ANSI_YELLOW + "JVM Memory:" + ColorUI.ANSI_RESET);
+        System.out.println(ColorUI.ANSI_GREEN + "  Heap Memory Usage: " + memoryMXBean.getHeapMemoryUsage());
     }
 
     /**
      * Displays the current local date and time in the JVM.
      */
-    private static void displayLocalDateTime() {
+    public void displayLocalDateTime() {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         String formattedDateTime = now.format(formatter);
-        System.out.println(yellowColor + "Local date and time (JVM): " + resetColor + formattedDateTime);
+        System.out.println(ColorUI.ANSI_YELLOW + "Local date and time (JVM): " + ColorUI.ANSI_RESET + formattedDateTime);
         Sys.displayTime();
+    }
+
+    /**
+     * Displays comprehensive information about the JVM.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
+    /**
+     * Displays information about the Java home directory in the JVM.
+     */
+    public void displayJavaHomeInfo() {
+        System.out.println(ColorUI.ANSI_YELLOW + "Java Home Directory: " + ColorUI.ANSI_RESET + System.getProperty("java.home"));
+    }
+
+    /**
+     * Displays information about JVM options.
+     */
+    public void displayJvmOptInfo() {
+        System.out.println(ColorUI.ANSI_YELLOW + "JVM Options: " + ColorUI.ANSI_RESET + ManagementFactory.getRuntimeMXBean().getInputArguments());
+    }
+
+    public void displayAllJVMInfo() throws IOException {
+        System.out.println(ColorUI.ANSI_RED + "JVM Information:" + ColorUI.ANSI_RESET);
+        displayClassLoadingInfo();
+        displayGarbageCollectorInfo();
+        displayCompilationInfo();
+        displayThreadInfo();
+        displayAvailableProcessorsInfo();
+        displayOperatingSystemInfo();
+        displayMemoryInfo();
+        displayLocalDateTime();
+        displayJavaHomeInfo();
+        displayJvmOptInfo();
     }
 }
