@@ -11,9 +11,7 @@ package com.whebsys.utils;
  */
 public class Author {
 
-    /**
-     * @param args the command line arguments
-     */
+
     public static final String AUTHOR = "@MaurosMJ";
     public static final String FULLAUTHOR = "Mauros Milach";
 

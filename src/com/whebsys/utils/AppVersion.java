@@ -20,7 +20,4 @@ public final class AppVersion {
         return VERSION;
     }
 
-    public static void printVersion() {
-        System.out.println("App Version: " + VERSION);
-    }
 }

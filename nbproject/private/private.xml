@@ -6,11 +6,11 @@
             <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/nta/application/UI.java</file>
             <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/nta/application/Program.java</file>
             <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/utils/Author.java</file>
-            <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/nta/model/service/http/httpPostConnection.java</file>
+            <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/nta/application/Input.java</file>
             <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/nta/model/service/db/sqlserver/SqlServerClient.java</file>
             <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/nta/model/service/smtp/SmtpClient.java</file>
-            <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/nta/model/service/http/httpGetConnection.java</file>
             <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/nta/model/service/db/mysql/MySqlClient.java</file>
+            <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/utils/Sys.java</file>
             <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/utils/AppVersion.java</file>
             <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/nta/model/service/db/oracle/OracleClient.java</file>
             <file>file:/C:/Users/Mauros/Documents/NetBeansProjects/NTA-networkTester/src/com/whebsys/nta/model/service/socket/SocketClient.java</file>
